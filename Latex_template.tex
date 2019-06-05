@@ -94,11 +94,30 @@
 %\jobrefid{\VAR{le_jobRefId}}
 
 % How the letter is opened
-\letteropening{Dear Mr \VAR{le_RecepientName},}
+\letteropening{Dear \BLOCK{ if receipientGender == '0' }
+Mr. \VAR{le_RecepientName}
+\BLOCK{ elif receipientGender == '1' }
+Ms. \VAR{le_RecepientName}
+\BLOCK{ else }
+Sir / Madam
+\BLOCK{ endif }
+,}
 % How the letter is closed
 \letterclosing{\VAR{le_closing},}
 % Any enclosures with the letter
-\letterenclosure[\VAR{le_enclosing}]{Curriculum Vitae, Transcripts, Reference Letters}
+\letterenclosure[\VAR{le_enclosing}]{\BLOCK{ if cb_CV == 'True' }
+Curriculum Vitae
+\BLOCK{ endif}
+\BLOCK{ if cb_certificates == 'True' }
+, Certificates
+\BLOCK{ endif}
+\BLOCK{ if cb_Transcripts == 'True' }
+, Transcripts
+\BLOCK{ endif}
+\BLOCK{ if cb_referenceLetters == 'True' }
+, Reference Letters
+\BLOCK{ endif}
+}
 
 
 %-------------------------------------------------------------------------------

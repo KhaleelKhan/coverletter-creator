@@ -132,6 +132,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		pdfcreator.compile_xelatex(pdfname='coverletter.pdf')
 
 	def generate_text(self):
+		# TODO: implement text coverletter creation
 		None
 
 

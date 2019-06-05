@@ -1,8 +1,11 @@
 import sys
-import mainWindow
+
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog
 from lxml.etree import Element, tostring, XML
+
+import mainWindow
+from pdfCreator import PdfCreator
 
 
 class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
@@ -15,6 +18,8 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.actionOpen.triggered.connect(self.open_project)
 
 		self.filename = ""
+
+		self.pb_generatePdf.clicked.connect(self.generate_pdf)
 
 	def save_project(self):
 		try:
@@ -115,15 +120,20 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 					else:
 						widget = self.findChild(QtWidgets.QCheckBox, str(element.tag))
 						if widget is not None and element.text is not None:
-							widget.setEnabled(str(element.text) == 'True')
+							widget.setChecked(str(element.text) == 'True')
 
 		self.filename = filename
 
 	def generate_pdf(self):
-		None
+		pdfcreator = PdfCreator(data=self.generate_root())
+		pdfcreator.read_template()
+		pdfcreator.convert_to_dict()
+		pdfcreator.render_template()
+		pdfcreator.compile_xelatex(pdfname='coverletter.pdf')
 
 	def generate_text(self):
 		None
+
 
 def main():
 	app = QtWidgets.QApplication(sys.argv)

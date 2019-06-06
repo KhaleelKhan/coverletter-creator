@@ -89,9 +89,17 @@
 \letterdate{\today}
 
 % The title of the letter
-\lettertitle{\VAR{le_Lettertitle}}
-\jobtitle{\VAR{le_jobTitle}}
-%\jobrefid{\VAR{le_jobRefId}}
+\BLOCK{ if le_Lettertitle }
+\jobrefid{\VAR{le_Lettertitle}}
+\BLOCK{ endif }
+
+\BLOCK{ if le_jobTitle }
+\jobrefid{\VAR{le_jobTitle}}
+\BLOCK{ endif }
+
+\BLOCK{ if le_jobRefId }
+\jobrefid{\VAR{le_jobRefId}}
+\BLOCK{ endif }
 
 % How the letter is opened
 \letteropening{Dear \BLOCK{ if receipientGender == '0' }

@@ -52,7 +52,7 @@
 %	Comment any of the lines below if they are not required
 %-------------------------------------------------------------------------------
 % Available options: circle|rectangle,edge/noedge,left/right
-\photo[circle,noedge,left]{cv_photo.jpg}
+\photo[circle,noedge,left]{\VAR{le_photoPath}}
 \name{\VAR{le_firstName}}{\VAR{le_lastName}}
 %\position{Software Architect{\enskip\cdotp\enskip}Security Expert}
 \address{\VAR{te_personalAddress}}
@@ -90,11 +90,11 @@
 
 % The title of the letter
 \BLOCK{ if le_Lettertitle }
-\jobrefid{\VAR{le_Lettertitle}}
+\lettertitle{\VAR{le_Lettertitle}}
 \BLOCK{ endif }
 
 \BLOCK{ if le_jobTitle }
-\jobrefid{\VAR{le_jobTitle}}
+\jobtitle{\VAR{le_jobTitle}}
 \BLOCK{ endif }
 
 \BLOCK{ if le_jobRefId }

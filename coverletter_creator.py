@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QFileDialog
 from lxml.etree import Element, tostring, XML
 
 import mainWindow
+from SpellTextEdit import SpellTextEdit
 from pdfCreator import PdfCreator
 
 
@@ -34,7 +35,17 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.setWindowTitleUnsaved()
 		self.connect_all_fields()
 
-		self.cb_Transcripts.clicked.connect(self.setWindowTitleUnsaved)
+		self.te_aboutMe = SpellTextEdit(self.tabAboutMe)
+		self.te_aboutMe.setObjectName("te_aboutMe")
+		self.verticalLayout_AboutMeTab.addWidget(self.te_aboutMe)
+
+		self.te_WhyFirm = SpellTextEdit(self.tabWhyFirm)
+		self.te_WhyFirm.setObjectName("te_WhyFirm")
+		self.verticalLayout_WhyFirmTab.addWidget(self.te_WhyFirm)
+
+		self.te_whyYou = SpellTextEdit(self.tabWhyYou)
+		self.te_whyYou.setObjectName("te_whyYou")
+		self.verticalLayout_WhyYouTab.addWidget(self.te_whyYou)
 
 	def connect_all_fields(self):
 		for child in self.centralwidget.findChildren(QtWidgets.QLineEdit):

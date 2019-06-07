@@ -27,7 +27,7 @@
     <item>
      <widget class="QTabWidget" name="mainTabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabPersonal">
        <attribute name="title">
@@ -268,7 +268,7 @@
        <attribute name="title">
         <string>About me</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <layout class="QVBoxLayout" name="verticalLayout_AboutMeTab">
         <item alignment="Qt::AlignHCenter|Qt::AlignTop">
          <widget class="QLabel" name="label_17">
           <property name="text">
@@ -276,16 +276,13 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QPlainTextEdit" name="te_aboutMe"/>
-        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tabWhyFirm">
        <attribute name="title">
         <string>Why this Firm?</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <layout class="QVBoxLayout" name="verticalLayout_WhyFirmTab">
         <item alignment="Qt::AlignHCenter|Qt::AlignTop">
          <widget class="QLabel" name="label_18">
           <property name="text">
@@ -293,25 +290,19 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QPlainTextEdit" name="te_WhyFirm"/>
-        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tabWhyYou">
        <attribute name="title">
         <string>Why You?</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
+       <layout class="QVBoxLayout" name="verticalLayout_WhyYouTab">
         <item alignment="Qt::AlignHCenter|Qt::AlignTop">
          <widget class="QLabel" name="label_19">
           <property name="text">
            <string>Specify why you are the perfect fit for this job?</string>
           </property>
          </widget>
-        </item>
-        <item>
-         <widget class="QPlainTextEdit" name="te_whyYou"/>
         </item>
        </layout>
       </widget>
@@ -546,7 +537,7 @@
     <string>Save As</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+A</string>
+    <string>F12</string>
    </property>
   </action>
   <action name="actionExit">

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import sys
 
 from PyQt5 import QtWidgets, QtGui, QtCore
@@ -15,18 +16,41 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		super(CoverletterCreator, self).__init__(parent)
 		self.setupUi(self)
 
+		self.mainTitle = "Coverletter Creator"
+
 		self.actionSave.triggered.connect(self.save_project)
 		self.actionSave_As.triggered.connect(self.saveas_project)
 		self.actionOpen.triggered.connect(self.open_project)
 		self.actionSet_LatexTemplate.triggered.connect(self.get_latex_template)
 		self.actionSet_LatexOutputDirectory.triggered.connect(self.get_latex_dir)
 
-		self.filename = ""
+		self.filename = "untitled.xml"
 		self.latex_template = 'Latex_template.tex'
 		self.latex_dir = './'
 
 		self.pb_browsePhoto.clicked.connect(self.browse_photo)
 		self.pb_generatePdf.clicked.connect(self.generate_pdf)
+
+		self.setWindowTitleUnsaved()
+		self.connect_all_fields()
+
+		self.cb_Transcripts.clicked.connect(self.setWindowTitleUnsaved)
+
+	def connect_all_fields(self):
+		for child in self.centralwidget.findChildren(QtWidgets.QLineEdit):
+			child.textChanged.connect(self.setWindowTitleUnsaved)
+		for child in self.centralwidget.findChildren(QtWidgets.QPlainTextEdit):
+			child.textChanged.connect(self.setWindowTitleUnsaved)
+		for child in self.centralwidget.findChildren(QtWidgets.QCheckBox):
+			child.clicked.connect(self.setWindowTitleUnsaved)
+
+	def setWindowTitleUnsaved(self):
+		_, fname = os.path.split(self.filename)
+		self.setWindowTitle(self.mainTitle + " - " + fname + "*")
+
+	def setWindowTitleSaved(self):
+		_, fname = os.path.split(self.filename)
+		self.setWindowTitle(self.mainTitle + " - " + fname)
 
 	def save_project(self):
 		try:
@@ -43,6 +67,8 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			self.filename = self.filename + '.xml'
 		with open(self.filename, 'wb') as f:
 			f.write(tostring(self.root, pretty_print=True))
+
+		self.setWindowTitleSaved()
 
 	def generate_root(self):
 		root = Element('root')
@@ -113,7 +139,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		if ".xml" not in filename:
 			filename = filename + '.xml'
 
-		with open(filename,'r') as f:
+		with open(filename, 'r') as f:
 			self.root = XML(f.read())#.replace("\n", ""))
 
 		for element in self.root.iter():
@@ -133,9 +159,9 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 						if widget is not None and element.text is not None:
 							widget.setChecked(str(element.text) == 'True')
 
-
 		self.filename = filename
 		self.get_photo(self.le_photoPath.text())
+		self.setWindowTitleSaved()
 
 	def browse_photo(self):
 		fname, _ = QFileDialog.getOpenFileName(self, 'Open profile photo',

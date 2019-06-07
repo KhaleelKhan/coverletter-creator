@@ -2,7 +2,7 @@
 
 import sys
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QFileDialog
 from lxml.etree import Element, tostring, XML
 
@@ -18,17 +18,25 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.actionSave.triggered.connect(self.save_project)
 		self.actionSave_As.triggered.connect(self.saveas_project)
 		self.actionOpen.triggered.connect(self.open_project)
+		self.actionSet_LatexTemplate.triggered.connect(self.get_latex_template)
+		self.actionSet_LatexOutputDirectory.triggered.connect(self.get_latex_dir)
 
 		self.filename = ""
+		self.latex_template = 'Latex_template.tex'
+		self.latex_dir = './'
 
+		self.pb_browsePhoto.clicked.connect(self.browse_photo)
 		self.pb_generatePdf.clicked.connect(self.generate_pdf)
 
 	def save_project(self):
 		try:
 			open(self.filename, 'w')
 		except OSError:
-			self.filename, _ = QFileDialog.getSaveFileName(self, "Save Project", "./", "XML Files (*.xml)")
-
+			filename, _ = QFileDialog.getSaveFileName(self, "Save Project", "./", "XML Files (*.xml)")
+			if filename:
+				self.filename = filename
+			else:
+				return
 		self.root = self.generate_root()
 
 		if ".xml" not in self.filename:
@@ -79,7 +87,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
 		misc = Element('misc')
 		root.append(misc)
-		for qW in [self.le_closing, self.le_enclosing]:
+		for qW in [self.le_closing, self.le_enclosing, self.le_photoPath]:
 			child = Element(qW.objectName())
 			child.text = qW.text()
 			misc.append(child)
@@ -94,10 +102,11 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 	def saveas_project(self):
 		filename, _ = QFileDialog.getSaveFileName(self, "Save Project As","./","XML Files (*.xml)")
 
-		if ".xml" not in filename:
-			filename = filename + '.xml'
-		with open(filename, 'wb') as f:
-			f.write(tostring(self.generate_root(), pretty_print=True))
+		if filename:
+			if ".xml" not in filename:
+				filename = filename + '.xml'
+			with open(filename, 'wb') as f:
+				f.write(tostring(self.generate_root(), pretty_print=True))
 
 	def open_project(self):
 		filename, _ = QFileDialog.getOpenFileName(self, "Open Project","./","XML Files (*.xml)")
@@ -112,9 +121,9 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			if widget is not None and element.text is not None:
 				widget.setText(str(element.text))
 			else:
-				widget = self.findChild(QtWidgets.QTextEdit, str(element.tag))
+				widget = self.findChild(QtWidgets.QPlainTextEdit, str(element.tag))
 				if widget is not None and element.text is not None:
-					widget.setText(str(element.text))
+					widget.setPlainText(str(element.text))
 				else:
 					widget = self.findChild(QtWidgets.QComboBox, str(element.tag))
 					if widget is not None and element.text is not None:
@@ -124,14 +133,45 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 						if widget is not None and element.text is not None:
 							widget.setChecked(str(element.text) == 'True')
 
+
 		self.filename = filename
+		self.get_photo(self.le_photoPath.text())
+
+	def browse_photo(self):
+		fname, _ = QFileDialog.getOpenFileName(self, 'Open profile photo',
+											   './', "Image files (*.jpg *.png)")
+		if fname:
+			image = QtGui.QImage(fname)
+			if image.isNull():
+				QtWidgets.QMessageBox.information(self, "Image Viewer", "Cannot load %s." % fname)
+				return
+			self.get_photo(fname)
+
+	def get_photo(self, fname):
+		image = QtGui.QImage(fname)
+		if image.isNull():
+			QtWidgets.QMessageBox.information(self, "Image Viewer", "Cannot load %s." % fname)
+			return
+		self.le_photoPath.setText(fname)
+		self.label_pic.setPixmap(
+			QtGui.QPixmap(fname).scaled(160, 160, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation))
+
+	def get_latex_template(self):
+		latex_template, _ = QFileDialog.getOpenFileName(self, "Open latex template", "./", "Latex Files (*.tex)")
+		if latex_template:
+			self.latex_template = latex_template
+
+	def get_latex_dir(self):
+		latex_dir = QFileDialog.getExistingDirectory(self, 'Latex output directory', './')
+		if latex_dir:
+			self.latex_dir = latex_dir
 
 	def generate_pdf(self):
 		pdfcreator = PdfCreator(data=self.generate_root())
-		pdfcreator.read_template()
+		pdfcreator.read_template(template=self.latex_template)
 		pdfcreator.convert_to_dict()
 		pdfcreator.render_template()
-		pdfcreator.compile_xelatex(pdfname='coverletter.pdf')
+		pdfcreator.compile_xelatex(pdfname='coverletter.pdf', outputDir=self.latex_dir)
 
 	def generate_text(self):
 		# TODO: implement text coverletter creation

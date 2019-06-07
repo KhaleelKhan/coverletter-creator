@@ -22,8 +22,8 @@ class PdfCreator():
 		super(PdfCreator, self).__init__()
 		self.lxml_data = data
 
-	def read_template(self):
-		self.template = latex_jinja_env.get_template(os.path.realpath('Latex_template.tex'))
+	def read_template(self, template):
+		self.template = latex_jinja_env.get_template(os.path.realpath(template))
 
 	def render_template(self):
 		self.renderer_template = self.template.render(self.render_dict)
@@ -35,7 +35,7 @@ class PdfCreator():
 				temp_dict[str(element.tag)] = str(element.text).replace('\n', r'\\')
 		self.render_dict = temp_dict
 
-	def compile_xelatex(self, pdfname):
+	def compile_xelatex(self, pdfname, outputDir):
 		"""
 		Genertates the pdf from string
 		"""
@@ -54,12 +54,12 @@ class PdfCreator():
 		f.write(self.renderer_template)
 		f.close()
 
-		proc = subprocess.Popen(['xelatex', '-synctex=1', '-interaction=nonstopmode', 'coverletter.tex'])
+		proc = subprocess.Popen(['xelatex', '-interaction=nonstopmode', 'coverletter.tex'])
 		proc.communicate()
 
 		os.rename('coverletter.pdf', pdfname)
-		shutil.copy(pdfname, current)
-		shutil.copy('coverletter.tex', current)
+		shutil.copy(pdfname, os.path.realpath(outputDir))
+		shutil.copy('coverletter.tex', os.path.realpath(outputDir))
 		shutil.rmtree(temp)
 		os.chdir(current)
 

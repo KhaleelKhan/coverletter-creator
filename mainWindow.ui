@@ -27,7 +27,7 @@
     <item>
      <widget class="QTabWidget" name="mainTabWidget">
       <property name="currentIndex">
-       <number>0</number>
+          <number>1</number>
       </property>
       <widget class="QWidget" name="tabPersonal">
        <attribute name="title">
@@ -60,9 +60,6 @@
         </item>
         <item row="1" column="1">
          <widget class="QLineEdit" name="le_lastName"/>
-        </item>
-        <item row="2" column="1">
-         <widget class="QTextEdit" name="te_personalAddress"/>
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_4">
@@ -114,6 +111,9 @@
         <item row="7" column="1">
          <widget class="QLineEdit" name="le_LinkedinName"/>
         </item>
+           <item row="2" column="1">
+               <widget class="QPlainTextEdit" name="te_personalAddress"/>
+           </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tabCompany">
@@ -173,7 +173,7 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QTextEdit" name="te_companyAddress"/>
+              <widget class="QPlainTextEdit" name="te_companyAddress"/>
           </item>
          </layout>
         </item>
@@ -277,7 +277,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="te_aboutMe"/>
+            <widget class="QPlainTextEdit" name="te_aboutMe"/>
         </item>
        </layout>
       </widget>
@@ -294,7 +294,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="te_WhyFirm"/>
+            <widget class="QPlainTextEdit" name="te_WhyFirm"/>
         </item>
        </layout>
       </widget>
@@ -311,7 +311,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="te_whyYou"/>
+            <widget class="QPlainTextEdit" name="te_whyYou"/>
         </item>
        </layout>
       </widget>
@@ -322,7 +322,7 @@
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="1" column="0">
+             <item row="1" column="0" alignment="Qt::AlignTop">
            <widget class="QLabel" name="label_21">
             <property name="text">
              <string>Enclosing</string>
@@ -336,7 +336,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+             <item row="1" column="1" alignment="Qt::AlignTop">
            <widget class="QLineEdit" name="le_enclosing">
             <property name="text">
              <string>Attached </string>
@@ -382,6 +382,38 @@
             </item>
            </layout>
           </item>
+             <item row="2" column="0" alignment="Qt::AlignTop">
+                 <widget class="QLabel" name="label_22">
+                     <property name="text">
+                         <string>Photo</string>
+                     </property>
+                 </widget>
+             </item>
+             <item row="2" column="1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_2">
+                     <item alignment="Qt::AlignTop">
+                         <widget class="QLineEdit" name="le_photoPath">
+                             <property name="readOnly">
+                                 <bool>true</bool>
+                             </property>
+                         </widget>
+                     </item>
+                     <item alignment="Qt::AlignRight|Qt::AlignTop">
+                         <widget class="QPushButton" name="pb_browsePhoto">
+                             <property name="text">
+                                 <string>...</string>
+                             </property>
+                         </widget>
+                     </item>
+                 </layout>
+             </item>
+             <item row="2" column="2">
+                 <widget class="QLabel" name="label_pic">
+                     <property name="text">
+                         <string>Photo display</string>
+                     </property>
+                 </widget>
+             </item>
          </layout>
         </item>
         <item>
@@ -434,6 +466,11 @@
     </item>
    </layout>
   </widget>
+     <widget class="QStatusBar" name="statusbar">
+         <property name="sizeGripEnabled">
+             <bool>true</bool>
+         </property>
+     </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -454,16 +491,32 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuEdit">
-    <property name="title">
-     <string>Edit</string>
-    </property>
-    <addaction name="actionReset_All"/>
+      <widget class="QMenu" name="menuOutput">
+          <property name="title">
+              <string>Output</string>
+          </property>
+          <widget class="QMenu" name="menuLatex">
+              <property name="title">
+                  <string>Latex</string>
+              </property>
+              <addaction name="actionSet_LatexTemplate"/>
+              <addaction name="actionSet_LatexOutputDirectory"/>
+              <addaction name="actionCompiler_2"/>
+          </widget>
+          <widget class="QMenu" name="menuText">
+              <property name="title">
+                  <string>Text</string>
+              </property>
+              <addaction name="actionText_Template"/>
+          </widget>
+          <addaction name="separator"/>
+          <addaction name="menuLatex"/>
+          <addaction name="menuText"/>
+          <addaction name="separator"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuEdit"/>
+      <addaction name="menuOutput"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNew">
    <property name="text">
     <string>New</string>
@@ -492,15 +545,33 @@
    <property name="text">
     <string>Save As</string>
    </property>
+      <property name="shortcut">
+          <string>Ctrl+A</string>
+      </property>
   </action>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
    </property>
   </action>
-  <action name="actionReset_All">
+     <action name="actionSet_LatexTemplate">
+         <property name="text">
+             <string>Set Template</string>
+         </property>
+     </action>
+     <action name="actionSet_LatexOutputDirectory">
    <property name="text">
-    <string>Reset All</string>
+       <string>Set Output Directory</string>
+   </property>
+     </action>
+     <action name="actionText_Template">
+         <property name="text">
+             <string>Set Template</string>
+         </property>
+     </action>
+     <action name="actionCompiler_2">
+         <property name="text">
+             <string>Compiler</string>
    </property>
   </action>
  </widget>

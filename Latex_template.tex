@@ -52,7 +52,9 @@
 %	Comment any of the lines below if they are not required
 %-------------------------------------------------------------------------------
 % Available options: circle|rectangle,edge/noedge,left/right
+\BLOCK{ if le_photoPath }
 \photo[circle,noedge,left]{\VAR{le_photoPath}}
+\BLOCK{ endif }
 \name{\VAR{le_firstName}}{\VAR{le_lastName}}
 %\position{Software Architect{\enskip\cdotp\enskip}Security Expert}
 \address{\VAR{te_personalAddress}}

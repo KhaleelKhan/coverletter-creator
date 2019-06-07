@@ -27,7 +27,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
 		self.filename = "untitled.xml"
 		self.latex_template = 'Latex_template.tex'
-		self.latex_dir = './'
+		self.latex_dir = os.path.abspath('./')
 
 		self.pb_browsePhoto.clicked.connect(self.browse_photo)
 		self.pb_generatePdf.clicked.connect(self.generate_pdf)
@@ -201,7 +201,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 	def get_latex_dir(self):
 		latex_dir = QFileDialog.getExistingDirectory(self, 'Latex output directory', './')
 		if latex_dir:
-			self.latex_dir = latex_dir
+			self.latex_dir = os.path.abspath(latex_dir)
 
 	def generate_pdf(self):
 		pdfcreator = PdfCreator(data=self.generate_root())

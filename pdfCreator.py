@@ -58,8 +58,8 @@ class PdfCreator():
 		proc.communicate()
 
 		os.rename('coverletter.pdf', pdfname)
-		shutil.copy(pdfname, os.path.realpath(outputDir))
-		shutil.copy('coverletter.tex', os.path.realpath(outputDir))
+		shutil.copy(pdfname, outputDir)
+		shutil.copy('coverletter.tex', outputDir)
 		shutil.rmtree(temp)
 		os.chdir(current)
 

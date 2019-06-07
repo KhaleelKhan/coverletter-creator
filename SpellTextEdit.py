@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+#
+# credit: https://nachtimwald.com/2009/08/22/qplaintextedit-with-in-line-spell-check/
 
 __license__ = 'MIT'
 __copyright__ = '2009, John Schember '

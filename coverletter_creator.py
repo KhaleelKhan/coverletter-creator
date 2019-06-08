@@ -10,6 +10,7 @@ from lxml.etree import Element, tostring, XML
 import mainWindow
 from SpellTextEdit import SpellTextEdit
 from pdfCreator import PdfCreator
+from textCreator import TextCreator
 
 
 class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
@@ -24,13 +25,18 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.actionOpen.triggered.connect(self.open_project)
 		self.actionSet_LatexTemplate.triggered.connect(self.get_latex_template)
 		self.actionSet_LatexOutputDirectory.triggered.connect(self.get_latex_dir)
+		self.actionText_Template.triggered.connect(self.get_text_template)
+
 
 		self.filename = "untitled.xml"
 		self.latex_template = 'Latex_template.tex'
 		self.latex_dir = os.path.abspath('./')
+		self.text_template = 'Text_template.txt'
+		self.text_dir = os.path.abspath('./')
 
 		self.pb_browsePhoto.clicked.connect(self.browse_photo)
 		self.pb_generatePdf.clicked.connect(self.generate_pdf)
+		self.pb_generateText.clicked.connect(self.generate_text)
 
 		self.setWindowTitleUnsaved()
 		self.connect_all_fields()
@@ -54,6 +60,8 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			child.textChanged.connect(self.setWindowTitleUnsaved)
 		for child in self.centralwidget.findChildren(QtWidgets.QCheckBox):
 			child.clicked.connect(self.setWindowTitleUnsaved)
+		for child in self.centralwidget.findChildren(SpellTextEdit):
+			child.textChanged.connect(self.setWindowTitleUnsaved)
 
 	def setWindowTitleUnsaved(self):
 		_, fname = os.path.split(self.filename)
@@ -147,6 +155,9 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
 	def open_project(self):
 		filename, _ = QFileDialog.getOpenFileName(self, "Open Project","./","XML Files (*.xml)")
+		if not filename:
+			return
+
 		if ".xml" not in filename:
 			filename = filename + '.xml'
 
@@ -203,6 +214,16 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		if latex_dir:
 			self.latex_dir = os.path.abspath(latex_dir)
 
+	def get_text_template(self):
+		template, _ = QFileDialog.getOpenFileName(self, "Open text template", "./", "Latex Files (*.tex)")
+		if template:
+			self.text_template = template
+
+	def get_text_dir(self):
+		text_dir = QFileDialog.getExistingDirectory(self, 'text output directory', './')
+		if text_dir:
+			self.text_dir = os.path.abspath(text_dir)
+
 	def generate_pdf(self):
 		pdfcreator = PdfCreator(data=self.generate_root())
 		pdfcreator.read_template(template=self.latex_template)
@@ -211,8 +232,11 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		pdfcreator.compile_xelatex(pdfname='coverletter.pdf', outputDir=self.latex_dir)
 
 	def generate_text(self):
-		# TODO: implement text coverletter creation
-		None
+		textcreator = TextCreator(data=self.generate_root())
+		textcreator.read_template(template=self.text_template)
+		textcreator.convert_to_dict()
+		textcreator.render_template()
+		textcreator.compile_text(textname='coverletter.txt', outputDir=self.text_dir)
 
 
 def main():

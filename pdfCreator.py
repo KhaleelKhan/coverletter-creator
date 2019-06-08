@@ -23,6 +23,7 @@ class PdfCreator():
 		self.lxml_data = data
 
 	def read_template(self, template):
+		# TODO: test if template file exists
 		self.template = latex_jinja_env.get_template(os.path.realpath(template))
 
 	def render_template(self):
@@ -47,7 +48,7 @@ class PdfCreator():
 
 		current = os.getcwd()
 		temp = tempfile.mkdtemp()
-		shutil.copy('cv_photo.jpg', temp)
+		shutil.copy('cv_photo.jpg', temp) # TODO: pass photo name from main window
 		os.chdir(temp)
 
 		f = open('coverletter.tex', 'w')

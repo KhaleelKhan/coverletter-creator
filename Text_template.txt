@@ -1,0 +1,66 @@
+{{le_firstName}} {{le_lastName}}
+{{te_personalAddress}}
+
+{{le_mobile}}
+{{le_email}}
+{{le_homepage}}
+https://github.com/{{le_githubName}}/
+https://www.linkedin.com/in/{{le_LinkedinName}}/
+
+{# The company being applied to #}
+To,
+{{le_companyName}}
+{{te_companyAddress}}
+
+{# The title of the letter #}
+{{le_Lettertitle}} {{le_jobTitle}}
+Job Reference ID: {{le_jobRefId}}
+
+Dear {% if receipientGender == '0' %}
+Mr. {{le_RecepientName}},
+{% elif receipientGender == '1' %}
+Ms. {{le_RecepientName}},
+{% else -%}
+Sir / Madam,
+
+{% endif %}
+
+
+{#-------------------------------------------------------------------------------#}
+{#	LETTER CONTENT #}
+{#-------------------------------------------------------------------------------#}
+
+
+About Me
+--------
+
+{{te_aboutMe}}
+
+Why {{le_companyShortName}}?
+--------
+
+{{te_WhyFirm}}
+
+Why Me?
+--------
+
+{{te_whyYou}}
+
+{{le_closing}}
+{{le_firstName}} {{le_lastName}}
+
+{{le_enclosing}}: {% if cb_CV == 'True' -%}
+Curriculum Vitae
+{%- endif -%}
+{%- if cb_certificates == 'True' -%}
+, Certificates
+{%- endif -%}
+{%- if cb_Transcripts == 'True' -%}
+, Transcripts
+{%- endif -%}
+{%- if cb_referenceLetters == 'True' -%}
+, Reference Letters
+{%- endif %}
+
+
+

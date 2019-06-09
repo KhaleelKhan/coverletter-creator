@@ -4,6 +4,7 @@ import os
 import sys
 
 from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QFileDialog
 from lxml.etree import Element, tostring, XML
 
@@ -19,28 +20,9 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.setupUi(self)
 
 		self.mainTitle = "Coverletter Creator"
+		self.settings = QSettings("KhaleelKhan", "Coverletter_Creator")
 
-		self.actionSave.triggered.connect(self.save_project)
-		self.actionSave_As.triggered.connect(self.saveas_project)
-		self.actionOpen.triggered.connect(self.open_project)
-		self.actionSet_LatexTemplate.triggered.connect(self.get_latex_template)
-		self.actionSet_LatexOutputDirectory.triggered.connect(self.get_latex_dir)
-		self.actionText_Template.triggered.connect(self.get_text_template)
-
-
-		self.filename = "untitled.xml"
-		self.latex_template = 'Latex_template.tex'
-		self.latex_dir = os.path.abspath('./')
-		self.text_template = 'Text_template.txt'
-		self.text_dir = os.path.abspath('./')
-
-		self.pb_browsePhoto.clicked.connect(self.browse_photo)
-		self.pb_generatePdf.clicked.connect(self.generate_pdf)
-		self.pb_generateText.clicked.connect(self.generate_text)
-
-		self.setWindowTitleUnsaved()
-		self.connect_all_fields()
-
+		# Create text editors with spell-check
 		self.te_aboutMe = SpellTextEdit(self.tabAboutMe)
 		self.te_aboutMe.setObjectName("te_aboutMe")
 		self.verticalLayout_AboutMeTab.addWidget(self.te_aboutMe)
@@ -53,6 +35,34 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.te_whyYou.setObjectName("te_whyYou")
 		self.verticalLayout_WhyYouTab.addWidget(self.te_whyYou)
 
+		self.actionSave.triggered.connect(self.save_project)
+		self.actionSave_As.triggered.connect(self.saveas_project)
+		self.actionOpen.triggered.connect(self.open_project)
+		self.actionExit.triggered.connect(self.close)
+		self.actionSet_LatexTemplate.triggered.connect(self.get_latex_template)
+		self.actionSet_LatexOutputDirectory.triggered.connect(self.get_latex_dir)
+		self.actionText_Template.triggered.connect(self.get_text_template)
+
+		# Set default values
+		self.filename = "untitled.xml"
+		self.file_dirty = False
+		self.latex_template = 'Latex_template.tex'
+		self.latex_dir = os.path.abspath('./')
+		self.text_template = 'Text_template.txt'
+		self.text_dir = os.path.abspath('./')
+
+		self.readSettings()
+		self.load_file(self.filename)
+
+		self.pb_browsePhoto.clicked.connect(self.browse_photo)
+		self.pb_generatePdf.clicked.connect(self.generate_pdf)
+		self.pb_generateText.clicked.connect(self.generate_text)
+
+
+
+
+		self.connect_all_fields()
+
 	def connect_all_fields(self):
 		for child in self.centralwidget.findChildren(QtWidgets.QLineEdit):
 			child.textChanged.connect(self.setWindowTitleUnsaved)
@@ -64,10 +74,12 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			child.textChanged.connect(self.setWindowTitleUnsaved)
 
 	def setWindowTitleUnsaved(self):
+		self.file_dirty = True
 		_, fname = os.path.split(self.filename)
 		self.setWindowTitle(self.mainTitle + " - " + fname + "*")
 
 	def setWindowTitleSaved(self):
+		self.file_dirty = False
 		_, fname = os.path.split(self.filename)
 		self.setWindowTitle(self.mainTitle + " - " + fname)
 
@@ -161,29 +173,42 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		if ".xml" not in filename:
 			filename = filename + '.xml'
 
-		with open(filename, 'r') as f:
-			self.root = XML(f.read())#.replace("\n", ""))
+		self.load_file(filename)
 
-		for element in self.root.iter():
-			widget = self.findChild(QtWidgets.QLineEdit, str(element.tag))
-			if widget is not None and element.text is not None:
-				widget.setText(str(element.text))
-			else:
-				widget = self.findChild(QtWidgets.QPlainTextEdit, str(element.tag))
+	def load_file(self, filename):
+		try:
+			with open(filename, 'r') as f:
+				self.root = XML(f.read())#.replace("\n", ""))
+
+			for element in self.root.iter():
+				widget = self.findChild(QtWidgets.QLineEdit, str(element.tag))
 				if widget is not None and element.text is not None:
-					widget.setPlainText(str(element.text))
+					widget.setText(str(element.text))
 				else:
-					widget = self.findChild(QtWidgets.QComboBox, str(element.tag))
+					widget = self.findChild(QtWidgets.QPlainTextEdit, str(element.tag))
 					if widget is not None and element.text is not None:
-						widget.setCurrentIndex(int(element.text))
+						widget.setPlainText(str(element.text))
 					else:
-						widget = self.findChild(QtWidgets.QCheckBox, str(element.tag))
+						widget = self.findChild(QtWidgets.QComboBox, str(element.tag))
 						if widget is not None and element.text is not None:
-							widget.setChecked(str(element.text) == 'True')
+							widget.setCurrentIndex(int(element.text))
+						else:
+							widget = self.findChild(QtWidgets.QCheckBox, str(element.tag))
+							if widget is not None and element.text is not None:
+								widget.setChecked(str(element.text) == 'True')
+							else:
+								widget = self.findChild(SpellTextEdit, str(element.tag))
+								if widget is not None and element.text is not None:
+									widget.setChecked(str(element.text) == 'True')
 
-		self.filename = filename
-		self.get_photo(self.le_photoPath.text())
-		self.setWindowTitleSaved()
+			self.filename = filename
+			self.get_photo(self.le_photoPath.text())
+			self.setWindowTitleSaved()
+
+		except FileNotFoundError:
+			self.setWindowTitleUnsaved()
+			self.file_dirty = False
+			print("Warning: File not found!")
 
 	def browse_photo(self):
 		fname, _ = QFileDialog.getOpenFileName(self, 'Open profile photo',
@@ -215,7 +240,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			self.latex_dir = os.path.abspath(latex_dir)
 
 	def get_text_template(self):
-		template, _ = QFileDialog.getOpenFileName(self, "Open text template", "./", "Latex Files (*.tex)")
+		template, _ = QFileDialog.getOpenFileName(self, "Open text template", "./", "Text Files (*.txt)")
 		if template:
 			self.text_template = template
 
@@ -237,6 +262,70 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		textcreator.convert_to_dict()
 		textcreator.render_template()
 		textcreator.compile_text(textname='coverletter.txt', outputDir=self.text_dir)
+
+	def writeSettings(self):
+		self.settings.beginGroup("MainWindow")
+		self.settings.setValue("size", self.size())
+		self.settings.setValue("pos", self.pos())
+		self.settings.endGroup()
+
+		self.settings.beginGroup("Templates")
+		self.settings.setValue("latex", str(self.latex_template))
+		self.settings.setValue("text", str(self.text_template))
+		self.settings.endGroup()
+
+		self.settings.beginGroup("Outputs")
+		self.settings.setValue("latex", str(self.latex_dir))
+		self.settings.setValue("text", str(self.text_dir))
+		self.settings.endGroup()
+
+		self.settings.beginGroup("Project")
+		self.settings.setValue("filename", str(self.filename))
+		self.settings.endGroup()
+
+		self.settings.sync()
+
+	def readSettings(self):
+		self.settings.beginGroup("MainWindow")
+		self.resize(self.settings.value("size", QtCore.QSize(616, 466)))
+		self.move(self.settings.value("pos", QtCore.QPoint(200, 200)))
+		self.settings.endGroup()
+
+		self.settings.beginGroup("Templates")
+		self.latex_template = str(self.settings.value("latex", self.latex_template))
+		self.text_template = str(self.settings.value("text", self.text_template))
+		self.settings.endGroup()
+
+		self.settings.beginGroup("Outputs")
+		self.latex_dir = str(self.settings.value("latex", self.latex_dir))
+		self.text_dir = str(self.settings.value("text", self.text_dir))
+		self.settings.endGroup()
+
+		self.settings.beginGroup("Project")
+		self.filename = str(self.settings.value("filename", self.filename))
+		self.settings.endGroup()
+
+	# event : QCloseEvent
+	def closeEvent(self, event):
+		if self.file_dirty :
+			choice = QtWidgets.QMessageBox.question(self, 'Project not saved',
+												"Save Project before exit?",
+												QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Cancel)
+			if choice == QtWidgets.QMessageBox.Yes:
+				self.save_project()
+				self.writeSettings()
+				event.accept()
+				sys.exit()
+			elif choice == QtWidgets.QMessageBox.Cancel:
+				event.ignore()
+			else:
+				self.writeSettings()
+				event.accept()
+				sys.exit()
+		else:
+			self.writeSettings()
+			event.accept()
+			sys.exit()
 
 
 def main():

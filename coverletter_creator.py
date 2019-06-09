@@ -35,6 +35,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.te_whyYou.setObjectName("te_whyYou")
 		self.verticalLayout_WhyYouTab.addWidget(self.te_whyYou)
 
+		self.actionNew.triggered.connect(self.new_project)
 		self.actionSave.triggered.connect(self.save_project)
 		self.actionSave_As.triggered.connect(self.saveas_project)
 		self.actionOpen.triggered.connect(self.open_project)
@@ -58,9 +59,6 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.pb_generatePdf.clicked.connect(self.generate_pdf)
 		self.pb_generateText.clicked.connect(self.generate_text)
 
-
-
-
 		self.connect_all_fields()
 
 	def connect_all_fields(self):
@@ -82,6 +80,29 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.file_dirty = False
 		_, fname = os.path.split(self.filename)
 		self.setWindowTitle(self.mainTitle + " - " + fname)
+
+	def new_project(self):
+		filename, _ = QFileDialog.getSaveFileName(self, "New Project", "./", "XML Files (*.xml)")
+		if filename:
+			if ".xml" not in filename:
+				filename = filename + '.xml'
+
+			self.reset_all_fields()
+			self.filename = filename
+			self.setWindowTitleUnsaved()
+		else:
+			return
+
+	def reset_all_fields(self):
+		for child in self.centralwidget.findChildren(QtWidgets.QLineEdit):
+			child.clear()
+		for child in self.centralwidget.findChildren(QtWidgets.QPlainTextEdit):
+			child.clear()
+		for child in self.centralwidget.findChildren(QtWidgets.QCheckBox):
+			child.setChecked(False)
+		for child in self.centralwidget.findChildren(SpellTextEdit):
+			child.clear()
+		self.label_pic.clear()
 
 	def save_project(self):
 		try:
@@ -279,9 +300,10 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.settings.setValue("text", str(self.text_dir))
 		self.settings.endGroup()
 
-		self.settings.beginGroup("Project")
-		self.settings.setValue("filename", str(self.filename))
-		self.settings.endGroup()
+		if not self.file_dirty:
+			self.settings.beginGroup("Project")
+			self.settings.setValue("filename", str(self.filename))
+			self.settings.endGroup()
 
 		self.settings.sync()
 

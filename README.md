@@ -27,7 +27,7 @@ $ python3 main.py
 How to use
 -----------
 
-Start a new project using <kbd>CTRL</kbd>+<kbd>N</kbd> or from ```File > New```
+Start a new project using <kbd>CTRL</kbd>+<kbd>N</kbd> or from ```File > New```.
 Enter Personal data in personal data tab.
 
 ![Personal Info Tab](docs/images/personal_info_tab.png "Personal Tab")
@@ -44,6 +44,8 @@ Add content to About me, why this firm? and why you? tab as you require. Keep it
 
 
 Finally in Finish tab add closing salutation and then select attached documents. Then click on `Generate PDF` or `Generate Text` button.
+
+![Finish Tab](docs/images/finish_tab.png "Finish me Tab")
 
 Output
 ------

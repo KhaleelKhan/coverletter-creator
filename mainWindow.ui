@@ -499,6 +499,7 @@
       <string>Text</string>
      </property>
      <addaction name="actionText_Template"/>
+     <addaction name="actionSet_TextOutputDirectory"/>
     </widget>
     <addaction name="separator"/>
     <addaction name="menuLatex"/>
@@ -563,6 +564,11 @@
   <action name="actionCompiler_2">
    <property name="text">
     <string>Compiler</string>
+   </property>
+  </action>
+  <action name="actionSet_TextOutputDirectory">
+   <property name="text">
+    <string>Set Output Directory</string>
    </property>
   </action>
  </widget>

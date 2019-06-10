@@ -276,6 +276,8 @@ class Ui_MainWindow(object):
         self.actionText_Template.setObjectName("actionText_Template")
         self.actionCompiler_2 = QtWidgets.QAction(MainWindow)
         self.actionCompiler_2.setObjectName("actionCompiler_2")
+        self.actionSet_TextOutputDirectory = QtWidgets.QAction(MainWindow)
+        self.actionSet_TextOutputDirectory.setObjectName("actionSet_TextOutputDirectory")
         self.menuFile.addAction(self.actionNew)
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
@@ -286,6 +288,7 @@ class Ui_MainWindow(object):
         self.menuLatex.addAction(self.actionSet_LatexOutputDirectory)
         self.menuLatex.addAction(self.actionCompiler_2)
         self.menuText.addAction(self.actionText_Template)
+        self.menuText.addAction(self.actionSet_TextOutputDirectory)
         self.menuOutput.addSeparator()
         self.menuOutput.addAction(self.menuLatex.menuAction())
         self.menuOutput.addAction(self.menuText.menuAction())
@@ -362,6 +365,7 @@ class Ui_MainWindow(object):
         self.actionSet_LatexOutputDirectory.setText(_translate("MainWindow", "Set Output Directory"))
         self.actionText_Template.setText(_translate("MainWindow", "Set Template"))
         self.actionCompiler_2.setText(_translate("MainWindow", "Compiler"))
+        self.actionSet_TextOutputDirectory.setText(_translate("MainWindow", "Set Output Directory"))
 
 
 

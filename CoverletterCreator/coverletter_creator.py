@@ -8,10 +8,10 @@ from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QFileDialog
 from lxml.etree import Element, tostring, XML
 
-import mainWindow
-from SpellTextEdit import SpellTextEdit
-from pdfCreator import PdfCreator
-from textCreator import TextCreator
+from CoverletterCreator.ui import mainWindow
+from CoverletterCreator.SpellTextEdit import SpellTextEdit
+from CoverletterCreator.pdfCreator import PdfCreator
+from CoverletterCreator.textCreator import TextCreator
 
 
 class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
@@ -352,7 +352,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			sys.exit()
 
 
-def main():
+def run():
 	app = QtWidgets.QApplication(sys.argv)
 	form = CoverletterCreator()
 	form.show()
@@ -360,4 +360,4 @@ def main():
 
 
 if __name__ == "__main__":
-	main()
+	run()

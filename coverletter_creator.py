@@ -276,7 +276,8 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		pdfcreator.read_template(template=self.latex_template)
 		pdfcreator.convert_to_dict()
 		pdfcreator.render_template()
-		pdfcreator.compile_xelatex(pdfname='coverletter.pdf', outputDir=self.latex_dir)
+		pdfcreator.compile_xelatex(pdfname='coverletter.pdf', outputDir=self.latex_dir,
+									photo=self.le_photoPath.text())
 
 	def generate_text(self):
 		textcreator = TextCreator(data=self.generate_root())

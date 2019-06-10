@@ -36,7 +36,7 @@ class PdfCreator():
 				temp_dict[str(element.tag)] = str(element.text).replace('\n', r'\\')
 		self.render_dict = temp_dict
 
-	def compile_xelatex(self, pdfname, outputDir):
+	def compile_xelatex(self, pdfname, outputDir, photo):
 		"""
 		Genertates the pdf from string
 		"""
@@ -48,7 +48,7 @@ class PdfCreator():
 
 		current = os.getcwd()
 		temp = tempfile.mkdtemp()
-		shutil.copy('cv_photo.jpg', temp) # TODO: pass photo name from main window
+		shutil.copy(photo, temp)
 		os.chdir(temp)
 
 		f = open('coverletter.tex', 'w')

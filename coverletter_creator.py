@@ -43,14 +43,15 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.actionSet_LatexTemplate.triggered.connect(self.get_latex_template)
 		self.actionSet_LatexOutputDirectory.triggered.connect(self.get_latex_dir)
 		self.actionText_Template.triggered.connect(self.get_text_template)
+		self.actionSet_TextOutputDirectory.triggered.connect(self.get_text_dir)
 
 		# Set default values
 		self.filename = "untitled.xml"
 		self.file_dirty = False
-		self.latex_template = 'Latex_template.tex'
-		self.latex_dir = os.path.abspath('./')
-		self.text_template = 'Text_template.txt'
-		self.text_dir = os.path.abspath('./')
+		self.latex_template = 'Latex/Templates/Awesome-CV/Latex_template.tex'
+		self.latex_dir = os.path.abspath('Latex/Output')
+		self.text_template = 'Text/Templates/Simple/Text_template.txt'
+		self.text_dir = os.path.abspath('Text/Output')
 
 		self.readSettings()
 		self.load_file(self.filename)
@@ -266,7 +267,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			self.text_template = template
 
 	def get_text_dir(self):
-		text_dir = QFileDialog.getExistingDirectory(self, 'text output directory', './')
+		text_dir = QFileDialog.getExistingDirectory(self, 'Text output directory', './')
 		if text_dir:
 			self.text_dir = os.path.abspath(text_dir)
 

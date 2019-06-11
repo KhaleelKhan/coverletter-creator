@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'mainWindow.ui'
+# Form implementation generated from reading ui file 'Designer/mainWindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.12.2
 #
@@ -142,14 +142,24 @@ class Ui_MainWindow(object):
         self.label_16.setObjectName("label_16")
         self.gridLayout.addWidget(self.label_16, 0, 0, 1, 1)
         self.receipientGender = QtWidgets.QComboBox(self.tabCompany)
+        self.receipientGender.setEditable(True)
         self.receipientGender.setObjectName("receipientGender")
         self.receipientGender.addItem("")
         self.receipientGender.addItem("")
         self.receipientGender.addItem("")
-        self.gridLayout.addWidget(self.receipientGender, 0, 1, 1, 1)
+        self.receipientGender.addItem("")
+        self.receipientGender.addItem("")
+        self.receipientGender.addItem("")
+        self.gridLayout.addWidget(self.receipientGender, 0, 2, 1, 1)
         self.le_RecepientName = QtWidgets.QLineEdit(self.tabCompany)
         self.le_RecepientName.setObjectName("le_RecepientName")
-        self.gridLayout.addWidget(self.le_RecepientName, 0, 2, 1, 1)
+        self.gridLayout.addWidget(self.le_RecepientName, 0, 3, 1, 1)
+        self.cb_recipientSalutation = QtWidgets.QComboBox(self.tabCompany)
+        self.cb_recipientSalutation.setEditable(True)
+        self.cb_recipientSalutation.setObjectName("cb_recipientSalutation")
+        self.cb_recipientSalutation.addItem("")
+        self.cb_recipientSalutation.addItem("")
+        self.gridLayout.addWidget(self.cb_recipientSalutation, 0, 1, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout)
         self.mainTabWidget.addTab(self.tabCompany, "")
         self.tabAboutMe = QtWidgets.QWidget()
@@ -327,6 +337,11 @@ class Ui_MainWindow(object):
         self.receipientGender.setItemText(0, _translate("MainWindow", "Mr."))
         self.receipientGender.setItemText(1, _translate("MainWindow", "Ms."))
         self.receipientGender.setItemText(2, _translate("MainWindow", "Unknown"))
+        self.receipientGender.setItemText(3, _translate("MainWindow", "Mrs."))
+        self.receipientGender.setItemText(4, _translate("MainWindow", "Dr."))
+        self.receipientGender.setItemText(5, _translate("MainWindow", "Prof."))
+        self.cb_recipientSalutation.setItemText(0, _translate("MainWindow", "Dear"))
+        self.cb_recipientSalutation.setItemText(1, _translate("MainWindow", "Hello"))
         self.mainTabWidget.setTabText(self.mainTabWidget.indexOf(self.tabCompany), _translate("MainWindow", "Company Info"))
         self.label_17.setText(_translate("MainWindow", "Give a short introduction about yourself"))
         self.mainTabWidget.setTabText(self.mainTabWidget.indexOf(self.tabAboutMe), _translate("MainWindow", "About me"))

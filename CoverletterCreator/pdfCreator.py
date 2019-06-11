@@ -1,5 +1,4 @@
 import os
-
 import jinja2
 
 latex_jinja_env = jinja2.Environment(

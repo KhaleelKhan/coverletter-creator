@@ -238,8 +238,11 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="0" column="2">
            <widget class="QComboBox" name="receipientGender">
+            <property name="editable">
+             <bool>true</bool>
+            </property>
             <item>
              <property name="text">
               <string>Mr.</string>
@@ -255,10 +258,42 @@
               <string>Unknown</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>Mrs.</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Dr.</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Prof.</string>
+             </property>
+            </item>
            </widget>
           </item>
-          <item row="0" column="2">
+          <item row="0" column="3">
            <widget class="QLineEdit" name="le_RecepientName"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="cb_recipientSalutation">
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <item>
+             <property name="text">
+              <string>Dear</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Hello</string>
+             </property>
+            </item>
+           </widget>
           </item>
          </layout>
         </item>

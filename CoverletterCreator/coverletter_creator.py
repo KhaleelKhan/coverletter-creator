@@ -8,10 +8,10 @@ from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QFileDialog
 from lxml.etree import Element, tostring, XML
 
-import mainWindow
-from SpellTextEdit import SpellTextEdit
-from pdfCreator import PdfCreator
-from textCreator import TextCreator
+from CoverletterCreator.SpellTextEdit import SpellTextEdit
+from CoverletterCreator.pdfCreator import PdfCreator
+from CoverletterCreator.textCreator import TextCreator
+from CoverletterCreator.ui import mainWindow
 
 
 class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
@@ -71,6 +71,9 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			child.clicked.connect(self.setWindowTitleUnsaved)
 		for child in self.centralwidget.findChildren(SpellTextEdit):
 			child.textChanged.connect(self.setWindowTitleUnsaved)
+		for child in self.centralwidget.findChildren(QtWidgets.QComboBox):
+			#self.cb_recipientSalutation.currentIndexChanged()
+			child.currentIndexChanged.connect(self.setWindowTitleUnsaved)
 
 	def setWindowTitleUnsaved(self):
 		self.file_dirty = True
@@ -101,6 +104,8 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			child.clear()
 		for child in self.centralwidget.findChildren(QtWidgets.QCheckBox):
 			child.setChecked(False)
+		for child in self.centralwidget.findChildren(SpellTextEdit):
+			child.clear()
 		for child in self.centralwidget.findChildren(SpellTextEdit):
 			child.clear()
 		self.label_pic.clear()
@@ -149,8 +154,12 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		company_info.append(company_address)
 
 		receipientGender = Element('receipientGender')
-		receipientGender.text = str(self.receipientGender.currentIndex())
+		receipientGender.text = str(self.receipientGender.currentText())
 		company_info.append(receipientGender)
+
+		receipientSalutation = Element('receipientSalutation')
+		receipientSalutation.text = str(self.cb_recipientSalutation.currentText())
+		company_info.append(receipientSalutation)
 
 		about_me = Element('te_aboutMe')
 		about_me.text = self.te_aboutMe.toPlainText()
@@ -213,7 +222,13 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 					else:
 						widget = self.findChild(QtWidgets.QComboBox, str(element.tag))
 						if widget is not None and element.text is not None:
-							widget.setCurrentIndex(int(element.text))
+							index = widget.findText(element.text, QtCore.Qt.MatchFixedString)
+							if index >= 0:
+								widget.setCurrentIndex(index)
+							elif str(element.text).isdigit():
+								widget.setCurrentIndex(int(element.text))
+							else:
+								widget.setCurrentText(str(element.text))
 						else:
 							widget = self.findChild(QtWidgets.QCheckBox, str(element.tag))
 							if widget is not None and element.text is not None:
@@ -276,7 +291,9 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		pdfcreator.read_template(template=self.latex_template)
 		pdfcreator.convert_to_dict()
 		pdfcreator.render_template()
-		pdfcreator.compile_xelatex(pdfname='coverletter.pdf', outputDir=self.latex_dir,
+		filename = self.le_companyShortName.text() + '_' + self.le_jobRefId.text() + '_Coverletter.pdf'
+		filename = "".join(i for i in filename if i not in "\/:*?<>|").replace(r' ', '_')
+		pdfcreator.compile_xelatex(pdfname=filename, outputDir=self.latex_dir,
 									photo=self.le_photoPath.text())
 
 	def generate_text(self):
@@ -284,7 +301,9 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		textcreator.read_template(template=self.text_template)
 		textcreator.convert_to_dict()
 		textcreator.render_template()
-		textcreator.compile_text(textname='coverletter.txt', outputDir=self.text_dir)
+		filename = self.le_companyShortName.text() + '_' + self.le_jobRefId.text() + '_Coverletter.txt'
+		filename = "".join(i for i in filename if i not in "\/:*?<>|").replace(r' ', '_')
+		textcreator.compile_text(textname=filename, outputDir=self.text_dir)
 
 	def writeSettings(self):
 		self.settings.beginGroup("MainWindow")
@@ -352,7 +371,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			sys.exit()
 
 
-def main():
+def run():
 	app = QtWidgets.QApplication(sys.argv)
 	form = CoverletterCreator()
 	form.show()
@@ -360,4 +379,4 @@ def main():
 
 
 if __name__ == "__main__":
-	main()
+	run()

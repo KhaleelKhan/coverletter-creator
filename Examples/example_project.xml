@@ -19,7 +19,8 @@
     <le_RecepientName>Fischer</le_RecepientName>
     <te_companyAddress>RealPlace,
 Germany</te_companyAddress>
-    <receipientGender>0</receipientGender>
+    <receipientGender>Mr.</receipientGender>
+    <receipientSalutation>Dear</receipientSalutation>
   </company_info>
   <te_aboutMe>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</te_aboutMe>
   <te_WhyFirm>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</te_WhyFirm>

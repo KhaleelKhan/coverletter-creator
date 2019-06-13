@@ -1,4 +1,6 @@
 import os
+import sys
+
 import jinja2
 
 latex_jinja_env = jinja2.Environment(
@@ -62,6 +64,11 @@ class PdfCreator():
 		shutil.copy('coverletter.tex', outputDir)
 		shutil.rmtree(temp)
 		os.chdir(current)
+
+		if sys.platform.startswith('linux'):
+			subprocess.call(["xdg-open", os.path.join(outputDir, pdfname)])
+		else:
+			os.startfile(os.path.join(outputDir, pdfname))
 
 
 if __name__ == "__main__":

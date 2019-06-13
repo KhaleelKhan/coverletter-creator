@@ -36,13 +36,19 @@
        <layout class="QFormLayout" name="personalInfo_layout">
         <item row="0" column="0">
          <widget class="QLabel" name="label">
+          <property name="accessibleName">
+           <string>FIRSTNAME</string>
+          </property>
           <property name="text">
            <string>First Name</string>
+          </property>
+          <property name="buddy">
+           <cstring></cstring>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="le_firstName"/>
+         <widget class="QLineEdit" name="FIRSTNAME"/>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_2">
@@ -59,7 +65,7 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="le_lastName"/>
+         <widget class="QLineEdit" name="LASTNAME"/>
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_4">
@@ -97,22 +103,22 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QLineEdit" name="le_mobile"/>
+         <widget class="QLineEdit" name="MOBILE"/>
         </item>
         <item row="4" column="1">
-         <widget class="QLineEdit" name="le_email"/>
+         <widget class="QLineEdit" name="EMAIL"/>
         </item>
         <item row="5" column="1">
-         <widget class="QLineEdit" name="le_homepage"/>
+         <widget class="QLineEdit" name="HOMEPAGE"/>
         </item>
         <item row="6" column="1">
-         <widget class="QLineEdit" name="le_githubName"/>
+         <widget class="QLineEdit" name="GITHUBNAME"/>
         </item>
         <item row="7" column="1">
-         <widget class="QLineEdit" name="le_LinkedinName"/>
+         <widget class="QLineEdit" name="LINKEDINNAME"/>
         </item>
         <item row="2" column="1">
-         <widget class="QPlainTextEdit" name="te_personalAddress"/>
+         <widget class="QPlainTextEdit" name="PERSONALADDRESS"/>
         </item>
        </layout>
       </widget>
@@ -131,7 +137,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="le_companyName">
+           <widget class="QLineEdit" name="COMPANYNAME">
             <property name="toolTip">
              <string>Full company name, for example: Intel Deutschland GmbH</string>
             </property>
@@ -145,7 +151,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="le_companyShortName">
+           <widget class="QLineEdit" name="COMPANYSHORTNAME">
             <property name="toolTip">
              <string>Company Short name, for example: Intel</string>
             </property>
@@ -159,7 +165,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="le_department">
+           <widget class="QLineEdit" name="DEPARTMENT">
             <property name="text">
              <string>Human Resources</string>
             </property>
@@ -173,7 +179,7 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QPlainTextEdit" name="te_companyAddress"/>
+           <widget class="QPlainTextEdit" name="COMPANYADDRESS"/>
           </item>
          </layout>
         </item>
@@ -194,7 +200,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="le_Lettertitle">
+           <widget class="QLineEdit" name="LETTERTITLE">
             <property name="text">
              <string>Job Application for</string>
             </property>
@@ -215,10 +221,10 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="le_jobTitle"/>
+           <widget class="QLineEdit" name="JOBTITLE"/>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="le_jobRefId"/>
+           <widget class="QLineEdit" name="JOBREFID"/>
           </item>
          </layout>
         </item>
@@ -239,7 +245,7 @@
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QComboBox" name="receipientGender">
+           <widget class="QComboBox" name="RECEIPIENTGENDER">
             <property name="editable">
              <bool>true</bool>
             </property>
@@ -276,7 +282,7 @@
            </widget>
           </item>
           <item row="0" column="3">
-           <widget class="QLineEdit" name="le_RecepientName"/>
+           <widget class="QLineEdit" name="RECEIPIENTNAME"/>
           </item>
           <item row="0" column="1">
            <widget class="QComboBox" name="cb_recipientSalutation">
@@ -363,44 +369,44 @@
            </widget>
           </item>
           <item row="1" column="1" alignment="Qt::AlignTop">
-           <widget class="QLineEdit" name="le_enclosing">
+           <widget class="QLineEdit" name="ENCLOSINGPREFIX">
             <property name="text">
              <string>Attached </string>
             </property>
            </widget>
           </item>
           <item row="0" column="1" colspan="2">
-           <widget class="QLineEdit" name="le_closing">
+           <widget class="QLineEdit" name="CLOSINGSALUTATION">
             <property name="text">
-             <string>Sincerely,</string>
+             <string>Sincerely</string>
             </property>
            </widget>
           </item>
           <item row="1" column="2">
            <layout class="QVBoxLayout" name="verticalLayout_7">
             <item>
-             <widget class="QCheckBox" name="cb_CV">
+             <widget class="QCheckBox" name="CVATTACHED">
               <property name="text">
                <string>Curriculum Vitae</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="cb_Transcripts">
+             <widget class="QCheckBox" name="TRANSCRIPTSATTACHED">
               <property name="text">
                <string>Transcripts</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="cb_certificates">
+             <widget class="QCheckBox" name="CERTIFICATESATTACHED">
               <property name="text">
                <string>Certificates</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="cb_referenceLetters">
+             <widget class="QCheckBox" name="REFLETTERSATTACHED">
               <property name="text">
                <string>Reference Letters</string>
               </property>
@@ -418,7 +424,7 @@
           <item row="2" column="1">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item alignment="Qt::AlignTop">
-             <widget class="QLineEdit" name="le_photoPath">
+             <widget class="QLineEdit" name="PHOTOPATH">
               <property name="readOnly">
                <bool>true</bool>
               </property>

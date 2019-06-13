@@ -1,4 +1,7 @@
 import os
+import subprocess
+import sys
+
 import jinja2
 
 
@@ -31,8 +34,13 @@ class TextCreator():
 		import os
 
 		outputFile = os.path.join(outputDir, textname)
-		with open(outputFile, 'w') as f:
+		with open(outputFile, 'w+') as f:
 			f.write(self.renderer_template)
+
+		if sys.platform.startswith('linux'):
+			subprocess.call(["xdg-open", outputFile])
+		else:
+			os.startfile(os.path.join(outputDir, outputFile))
 
 
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import functools
 import os
 import sys
 
@@ -22,18 +23,20 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.mainTitle = "Coverletter Creator"
 		self.settings = QSettings("KhaleelKhan", "Coverletter_Creator")
 
+		self.clipboard = QtWidgets.QApplication.clipboard()
+
 		# Create text editors with spell-check
-		self.te_aboutMe = SpellTextEdit(self.tabAboutMe)
-		self.te_aboutMe.setObjectName("te_aboutMe")
-		self.verticalLayout_AboutMeTab.addWidget(self.te_aboutMe)
+		self.TEXTABOUTME = SpellTextEdit(self.tabAboutMe)
+		self.TEXTABOUTME.setObjectName("TEXTABOUTME")
+		self.verticalLayout_AboutMeTab.addWidget(self.TEXTABOUTME)
 
-		self.te_WhyFirm = SpellTextEdit(self.tabWhyFirm)
-		self.te_WhyFirm.setObjectName("te_WhyFirm")
-		self.verticalLayout_WhyFirmTab.addWidget(self.te_WhyFirm)
+		self.TEXTWHYTHISFIRM = SpellTextEdit(self.tabWhyFirm)
+		self.TEXTWHYTHISFIRM.setObjectName("TEXTWHYTHISFIRM")
+		self.verticalLayout_WhyFirmTab.addWidget(self.TEXTWHYTHISFIRM)
 
-		self.te_whyYou = SpellTextEdit(self.tabWhyYou)
-		self.te_whyYou.setObjectName("te_whyYou")
-		self.verticalLayout_WhyYouTab.addWidget(self.te_whyYou)
+		self.TEXTWHYYOU = SpellTextEdit(self.tabWhyYou)
+		self.TEXTWHYYOU.setObjectName("TEXTWHYYOU")
+		self.verticalLayout_WhyYouTab.addWidget(self.TEXTWHYYOU)
 
 		self.actionNew.triggered.connect(self.new_project)
 		self.actionSave.triggered.connect(self.save_project)
@@ -63,7 +66,15 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.connect_all_fields()
 		self.connect_mandatory_fields()
 
-		self.le_companyName.editingFinished.connect(lambda: self.le_companyShortName.setText(self.le_companyName.text()))
+		# Connect all labels to click handler
+		for child in self.centralwidget.findChildren(QtWidgets.QLabel):
+			child.mousePressEvent = functools.partial(self.label_clicked, source=child)
+		for child in self.centralwidget.findChildren(QtWidgets.QCheckBox):
+			child.mousePressEvent = functools.partial(self.label_clicked, source=child)
+		self.RECEIPIENTGENDER.mousePressEvent = functools.partial(self.label_clicked, source=self.RECEIPIENTGENDER)
+		self.RECEIPIENTSALUTATION.mousePressEvent = functools.partial(self.label_clicked, source=self.RECEIPIENTSALUTATION)
+
+		self.COMPANYNAME.editingFinished.connect(lambda: self.COMPANYSHORTNAME.setText(self.COMPANYNAME.text()))
 
 	def connect_all_fields(self):
 		for child in self.centralwidget.findChildren(QtWidgets.QLineEdit):
@@ -79,13 +90,16 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			child.currentIndexChanged.connect(self.setWindowTitleUnsaved)
 
 	def connect_mandatory_fields(self):
-		mandatory_fields_list = [self.le_firstName, self.le_lastName, self.le_mobile, self.le_email, self.le_companyName]
+		mandatory_fields_list = [self.FIRSTNAME, self.LASTNAME, self.MOBILE, self.EMAIL, self.COMPANYNAME]
 		for textBox in mandatory_fields_list:
 			textBox.textChanged[str].connect(lambda: self.pb_generatePdf.setEnabled(textBox.text() != ""))
 
 		for textBox in mandatory_fields_list:
 			textBox.textChanged[str].connect(lambda: self.pb_generateText.setEnabled(textBox.text() != ""))
 
+	def label_clicked(self, event, source):
+		var_code = source.accessibleName()
+		self.clipboard.setText(str(var_code))
 
 	def setWindowTitleUnsaved(self):
 		self.file_dirty = True
@@ -145,53 +159,53 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
 		personal_info = Element('personal_info')
 		root.append(personal_info)
-		for qW in [self.le_firstName, self.le_lastName, self.le_mobile, self.le_email, self.le_homepage, self.le_githubName, self.le_LinkedinName	]:
+		for qW in [self.FIRSTNAME, self.LASTNAME, self.MOBILE, self.EMAIL, self.HOMEPAGE, self.GITHUBNAME, self.LINKEDINNAME	]:
 			child = Element(qW.objectName())
 			child.text = qW.text()
 			personal_info.append(child)
 
-		personal_address = Element('te_personalAddress')
-		personal_address.text = self.te_personalAddress.toPlainText()
+		personal_address = Element('PERSONALADDRESS')
+		personal_address.text = self.PERSONALADDRESS.toPlainText()
 		personal_info.append(personal_address)
 
 		company_info = Element('company_info')
 		root.append(company_info)
-		for qW in [self.le_companyName, self.le_companyShortName, self.le_department, self.le_Lettertitle, self.le_jobTitle, self.le_jobRefId, self.le_RecepientName]:
+		for qW in [self.COMPANYNAME, self.COMPANYSHORTNAME, self.DEPARTMENT, self.LETTERTITLE, self.JOBTITLE, self.JOBREFID, self.RECEIPIENTNAME]:
 			child = Element(qW.objectName())
 			child.text = qW.text()
 			company_info.append(child)
 
-		company_address = Element('te_companyAddress')
-		company_address.text = self.te_companyAddress.toPlainText()
+		company_address = Element('COMPANYADDRESS')
+		company_address.text = self.COMPANYADDRESS.toPlainText()
 		company_info.append(company_address)
 
-		receipientGender = Element('receipientGender')
-		receipientGender.text = str(self.receipientGender.currentText())
-		company_info.append(receipientGender)
+		RECEIPIENTGENDER = Element('RECEIPIENTGENDER')
+		RECEIPIENTGENDER.text = str(self.RECEIPIENTGENDER.currentText())
+		company_info.append(RECEIPIENTGENDER)
 
-		receipientSalutation = Element('receipientSalutation')
-		receipientSalutation.text = str(self.cb_recipientSalutation.currentText())
-		company_info.append(receipientSalutation)
+		RECEIPIENTSALUTATION = Element('RECEIPIENTSALUTATION')
+		RECEIPIENTSALUTATION.text = str(self.cb_recipientSalutation.currentText())
+		company_info.append(RECEIPIENTSALUTATION)
 
-		about_me = Element('te_aboutMe')
-		about_me.text = self.te_aboutMe.toPlainText()
+		about_me = Element('TEXTABOUTME')
+		about_me.text = self.TEXTABOUTME.toPlainText()
 		root.append(about_me)
 
-		WhyFirm = Element('te_WhyFirm')
-		WhyFirm.text = self.te_WhyFirm.toPlainText()
+		WhyFirm = Element('TEXTWHYTHISFIRM')
+		WhyFirm.text = self.TEXTWHYTHISFIRM.toPlainText()
 		root.append(WhyFirm)
 
-		whyYou = Element('te_whyYou')
-		whyYou.text = self.te_whyYou.toPlainText()
+		whyYou = Element('TEXTWHYYOU')
+		whyYou.text = self.TEXTWHYYOU.toPlainText()
 		root.append(whyYou)
 
 		misc = Element('misc')
 		root.append(misc)
-		for qW in [self.le_closing, self.le_enclosing, self.le_photoPath]:
+		for qW in [self.CLOSINGSALUTATION, self.ENCLOSINGPREFIX, self.PHOTOPATH]:
 			child = Element(qW.objectName())
 			child.text = qW.text()
 			misc.append(child)
-		for qW in [self.cb_certificates, self.cb_CV, self.cb_referenceLetters, self.cb_Transcripts, ]:
+		for qW in [self.CERTIFICATESATTACHED, self.CVATTACHED, self.REFLETTERSATTACHED, self.TRANSCRIPTSATTACHED, ]:
 			child = Element(qW.objectName())
 			child.text = str(qW.isChecked())
 			misc.append(child)
@@ -251,7 +265,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 									widget.setChecked(str(element.text) == 'True')
 
 			self.filename = filename
-			self.get_photo(self.le_photoPath.text())
+			self.get_photo(self.PHOTOPATH.text())
 			self.setWindowTitleSaved()
 
 		except FileNotFoundError:
@@ -274,7 +288,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		if image.isNull():
 			QtWidgets.QMessageBox.information(self, "Image Viewer", "Cannot load %s." % fname)
 			return
-		self.le_photoPath.setText(fname)
+		self.PHOTOPATH.setText(fname)
 		self.label_pic.setPixmap(
 			QtGui.QPixmap(fname).scaled(160, 160, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation))
 
@@ -303,19 +317,19 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		pdfcreator.read_template(template=self.latex_template)
 		pdfcreator.convert_to_dict()
 		pdfcreator.render_template()
-		filename = self.le_companyShortName.text() + '_' + self.le_jobRefId.text() + '_Coverletter.pdf'
-		filename = "".join(i for i in filename if i not in "\/:*?<>|").replace(r' ', '_')
-		pdfcreator.compile_xelatex(pdfname=filename, outputDir=self.latex_dir,
-									photo=self.le_photoPath.text())
+		filename = self.COMPANYSHORTNAME.text() + '_' + self.JOBREFID.text() + '_Coverletter'
+		filename = "".join(i for i in filename if i not in ".\/:*?<>|").replace(r' ', '_')
+		pdfcreator.compile_xelatex(pdfname=filename+".pdf", outputDir=self.latex_dir,
+									photo=self.PHOTOPATH.text())
 
 	def generate_text(self):
 		textcreator = TextCreator(data=self.generate_root())
 		textcreator.read_template(template=self.text_template)
 		textcreator.convert_to_dict()
 		textcreator.render_template()
-		filename = self.le_companyShortName.text() + '_' + self.le_jobRefId.text() + '_Coverletter.txt'
-		filename = "".join(i for i in filename if i not in "\/:*?<>|").replace(r' ', '_')
-		textcreator.compile_text(textname=filename, outputDir=self.text_dir)
+		filename = self.COMPANYSHORTNAME.text() + '_' + self.JOBREFID.text() + '_Coverletter'
+		filename = "".join(i for i in filename if i not in ".\/:*?<>|").replace(r' ', '_')
+		textcreator.compile_text(textname=filename+".txt", outputDir=self.text_dir)
 
 	def writeSettings(self):
 		self.settings.beginGroup("MainWindow")

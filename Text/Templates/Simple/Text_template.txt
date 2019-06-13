@@ -1,25 +1,25 @@
-{{le_firstName}} {{le_lastName}}
-{{te_personalAddress}}
+{{FIRSTNAME}} {{LASTNAME}}
+{{PERSONALADDRESS}}
 
-{{le_mobile}}
-{{le_email}}
-{{le_homepage}}
-https://github.com/{{le_githubName}}/
-https://www.linkedin.com/in/{{le_LinkedinName}}/
+{{MOBILE}}
+{{EMAIL}}
+{{HOMEPAGE}}
+https://github.com/{{GITHUBNAME}}/
+https://www.linkedin.com/in/{{LINKEDINNAME}}/
 
 {# The company being applied to #}
 To,
-{{le_companyName}}
-{{te_companyAddress}}
+{{COMPANYNAME}}
+{{COMPANYADDRESS}}
 
 {# The title of the letter #}
-{{le_Lettertitle}} {{le_jobTitle}}
-Job Reference ID: {{le_jobRefId}}
+{{LETTERTITLE}} {{JOBTITLE}}
+Job Reference ID: {{JOBREFID}}
 
-Dear {% if receipientGender == '0' %}
-Mr. {{le_RecepientName}},
-{% elif receipientGender == '1' %}
-Ms. {{le_RecepientName}},
+Dear {% if RECEIPIENTGENDER == '0' %}
+Mr. {{RECEIPIENTNAME}},
+{% elif RECEIPIENTGENDER == '1' %}
+Ms. {{RECEIPIENTNAME}},
 {% else -%}
 Sir / Madam,
 
@@ -34,31 +34,31 @@ Sir / Madam,
 About Me
 --------
 
-{{te_aboutMe}}
+{{TEXTABOUTME}}
 
-Why {{le_companyShortName}}?
+Why {{COMPANYSHORTNAME}}?
 --------
 
-{{te_WhyFirm}}
+{{TEXTWHYTHISFIRM}}
 
 Why Me?
 --------
 
-{{te_whyYou}}
+{{TEXTWHYYOU}}
 
-{{le_closing}}
-{{le_firstName}} {{le_lastName}}
+{{CLOSINGSALUTATION}}
+{{FIRSTNAME}} {{LASTNAME}}
 
-{{le_enclosing}}: {% if cb_CV == 'True' -%}
+{{ENCLOSINGPREFIX}}: {% if CVATTACHED == 'True' -%}
 Curriculum Vitae
 {%- endif -%}
-{%- if cb_certificates == 'True' -%}
+{%- if CERTIFICATESATTACHED == 'True' -%}
 , Certificates
 {%- endif -%}
-{%- if cb_Transcripts == 'True' -%}
+{%- if TRANSCRIPTSATTACHED == 'True' -%}
 , Transcripts
 {%- endif -%}
-{%- if cb_referenceLetters == 'True' -%}
+{%- if REFLETTERSATTACHED == 'True' -%}
 , Reference Letters
 {%- endif %}
 

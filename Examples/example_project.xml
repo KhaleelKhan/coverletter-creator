@@ -30,7 +30,7 @@ At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praese
   <misc>
     <CLOSINGSALUTATION>Sincerely</CLOSINGSALUTATION>
     <ENCLOSINGPREFIX>Attached</ENCLOSINGPREFIX>
-    <PHOTOPATH>/home/khaleel/Workarea/CoverLetter_creator/Latex/Resources/profile.png</PHOTOPATH>
+    <PHOTOPATH>Latex/Resources/profile.png</PHOTOPATH>
     <CERTIFICATESATTACHED>False</CERTIFICATESATTACHED>
     <CVATTACHED>True</CVATTACHED>
     <REFLETTERSATTACHED>True</REFLETTERSATTACHED>

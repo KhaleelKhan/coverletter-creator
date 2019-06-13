@@ -52,6 +52,9 @@
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_2">
+          <property name="accessibleName">
+           <string>LASTNAME</string>
+          </property>
           <property name="text">
            <string>Last Name</string>
           </property>
@@ -59,6 +62,9 @@
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_3">
+          <property name="accessibleName">
+           <string>PERSONALADDRESS</string>
+          </property>
           <property name="text">
            <string>Address</string>
           </property>
@@ -69,6 +75,9 @@
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_4">
+          <property name="accessibleName">
+           <string>MOBILE</string>
+          </property>
           <property name="text">
            <string>Mobile</string>
           </property>
@@ -76,6 +85,9 @@
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="label_5">
+          <property name="accessibleName">
+           <string>EMAIL</string>
+          </property>
           <property name="text">
            <string>Email</string>
           </property>
@@ -83,6 +95,9 @@
         </item>
         <item row="5" column="0">
          <widget class="QLabel" name="label_6">
+          <property name="accessibleName">
+           <string>HOMEPAGE</string>
+          </property>
           <property name="text">
            <string>Homepage</string>
           </property>
@@ -90,6 +105,9 @@
         </item>
         <item row="6" column="0">
          <widget class="QLabel" name="label_7">
+          <property name="accessibleName">
+           <string>GITHUBNAME</string>
+          </property>
           <property name="text">
            <string>Github</string>
           </property>
@@ -97,6 +115,9 @@
         </item>
         <item row="7" column="0">
          <widget class="QLabel" name="label_8">
+          <property name="accessibleName">
+           <string>LINKEDINNAME</string>
+          </property>
           <property name="text">
            <string>Linkedin</string>
           </property>
@@ -131,6 +152,9 @@
          <layout class="QFormLayout" name="formLayout_3">
           <item row="0" column="0">
            <widget class="QLabel" name="label_9">
+            <property name="accessibleName">
+             <string>COMPANYNAME</string>
+            </property>
             <property name="text">
              <string>Company Name</string>
             </property>
@@ -145,6 +169,9 @@
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_10">
+            <property name="accessibleName">
+             <string>COMPANYSHORTNAME</string>
+            </property>
             <property name="text">
              <string>Company Short Name</string>
             </property>
@@ -159,6 +186,9 @@
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_11">
+            <property name="accessibleName">
+             <string>DEPARTMENT</string>
+            </property>
             <property name="text">
              <string>Department</string>
             </property>
@@ -173,6 +203,9 @@
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_12">
+            <property name="accessibleName">
+             <string>COMPANYADDRESS</string>
+            </property>
             <property name="text">
              <string>Address</string>
             </property>
@@ -194,6 +227,9 @@
          <layout class="QFormLayout" name="formLayout_4">
           <item row="0" column="0">
            <widget class="QLabel" name="label_13">
+            <property name="accessibleName">
+             <string>LETTERTITLE</string>
+            </property>
             <property name="text">
              <string>Letter Title</string>
             </property>
@@ -208,6 +244,9 @@
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_14">
+            <property name="accessibleName">
+             <string>JOBTITLE</string>
+            </property>
             <property name="text">
              <string>Job Title</string>
             </property>
@@ -215,6 +254,9 @@
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_15">
+            <property name="accessibleName">
+             <string>JOBREFID</string>
+            </property>
             <property name="text">
              <string>Job Referrence ID</string>
             </property>
@@ -239,6 +281,9 @@
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
            <widget class="QLabel" name="label_16">
+            <property name="accessibleName">
+             <string>RECEIPIENTNAME</string>
+            </property>
             <property name="text">
              <string>Recipient</string>
             </property>
@@ -246,6 +291,9 @@
           </item>
           <item row="0" column="2">
            <widget class="QComboBox" name="RECEIPIENTGENDER">
+            <property name="accessibleName">
+             <string>RECEIPIENTGENDER</string>
+            </property>
             <property name="editable">
              <bool>true</bool>
             </property>
@@ -285,7 +333,10 @@
            <widget class="QLineEdit" name="RECEIPIENTNAME"/>
           </item>
           <item row="0" column="1">
-           <widget class="QComboBox" name="cb_recipientSalutation">
+           <widget class="QComboBox" name="RECEIPIENTSALUTATION">
+            <property name="accessibleName">
+             <string>RECEIPIENTSALUTATION</string>
+            </property>
             <property name="editable">
              <bool>true</bool>
             </property>
@@ -312,6 +363,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_AboutMeTab">
         <item alignment="Qt::AlignHCenter|Qt::AlignTop">
          <widget class="QLabel" name="label_17">
+          <property name="accessibleName">
+           <string>TEXTABOUTME</string>
+          </property>
           <property name="text">
            <string>Give a short introduction about yourself</string>
           </property>
@@ -326,6 +380,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_WhyFirmTab">
         <item alignment="Qt::AlignHCenter|Qt::AlignTop">
          <widget class="QLabel" name="label_18">
+          <property name="accessibleName">
+           <string>TEXTWHYTHISFIRM</string>
+          </property>
           <property name="text">
            <string>Why did you choose this particular firm?</string>
           </property>
@@ -340,6 +397,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_WhyYouTab">
         <item alignment="Qt::AlignHCenter|Qt::AlignTop">
          <widget class="QLabel" name="label_19">
+          <property name="accessibleName">
+           <string>TEXTWHYYOU</string>
+          </property>
           <property name="text">
            <string>Specify why you are the perfect fit for this job?</string>
           </property>
@@ -356,6 +416,9 @@
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="1" column="0" alignment="Qt::AlignTop">
            <widget class="QLabel" name="label_21">
+            <property name="accessibleName">
+             <string>ENCLOSINGPREFIX</string>
+            </property>
             <property name="text">
              <string>Enclosing</string>
             </property>
@@ -363,6 +426,9 @@
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_20">
+            <property name="accessibleName">
+             <string>CLOSINGSALUTATION</string>
+            </property>
             <property name="text">
              <string>Letter Closing</string>
             </property>
@@ -386,6 +452,9 @@
            <layout class="QVBoxLayout" name="verticalLayout_7">
             <item>
              <widget class="QCheckBox" name="CVATTACHED">
+              <property name="accessibleName">
+               <string>CVATTACHED</string>
+              </property>
               <property name="text">
                <string>Curriculum Vitae</string>
               </property>
@@ -393,6 +462,9 @@
             </item>
             <item>
              <widget class="QCheckBox" name="TRANSCRIPTSATTACHED">
+              <property name="accessibleName">
+               <string>TRANSCRIPTSATTACHED</string>
+              </property>
               <property name="text">
                <string>Transcripts</string>
               </property>
@@ -400,6 +472,9 @@
             </item>
             <item>
              <widget class="QCheckBox" name="CERTIFICATESATTACHED">
+              <property name="accessibleName">
+               <string>CERTIFICATESATTACHED</string>
+              </property>
               <property name="text">
                <string>Certificates</string>
               </property>
@@ -407,6 +482,9 @@
             </item>
             <item>
              <widget class="QCheckBox" name="REFLETTERSATTACHED">
+              <property name="accessibleName">
+               <string>REFLETTERSATTACHED</string>
+              </property>
               <property name="text">
                <string>Reference Letters</string>
               </property>
@@ -416,6 +494,9 @@
           </item>
           <item row="2" column="0" alignment="Qt::AlignTop">
            <widget class="QLabel" name="label_22">
+            <property name="accessibleName">
+             <string>PHOTOPATH</string>
+            </property>
             <property name="text">
              <string>Photo</string>
             </property>
@@ -442,7 +523,7 @@
           <item row="2" column="2">
            <widget class="QLabel" name="label_pic">
             <property name="text">
-             <string>Photo display</string>
+             <string/>
             </property>
            </widget>
           </item>

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import functools
 import os
 import sys
 
@@ -21,6 +22,8 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
 		self.mainTitle = "Coverletter Creator"
 		self.settings = QSettings("KhaleelKhan", "Coverletter_Creator")
+
+		self.clipboard = QtWidgets.QApplication.clipboard()
 
 		# Create text editors with spell-check
 		self.TEXTABOUTME = SpellTextEdit(self.tabAboutMe)
@@ -63,6 +66,14 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.connect_all_fields()
 		self.connect_mandatory_fields()
 
+		# Connect all labels to click handler
+		for child in self.centralwidget.findChildren(QtWidgets.QLabel):
+			child.mousePressEvent = functools.partial(self.label_clicked, source=child)
+		for child in self.centralwidget.findChildren(QtWidgets.QCheckBox):
+			child.mousePressEvent = functools.partial(self.label_clicked, source=child)
+		self.RECEIPIENTGENDER.mousePressEvent = functools.partial(self.label_clicked, source=self.RECEIPIENTGENDER)
+		self.RECEIPIENTSALUTATION.mousePressEvent = functools.partial(self.label_clicked, source=self.RECEIPIENTSALUTATION)
+
 		self.COMPANYNAME.editingFinished.connect(lambda: self.COMPANYSHORTNAME.setText(self.COMPANYNAME.text()))
 
 	def connect_all_fields(self):
@@ -86,6 +97,9 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		for textBox in mandatory_fields_list:
 			textBox.textChanged[str].connect(lambda: self.pb_generateText.setEnabled(textBox.text() != ""))
 
+	def label_clicked(self, event, source):
+		var_code = source.accessibleName()
+		self.clipboard.setText(str(var_code))
 
 	def setWindowTitleUnsaved(self):
 		self.file_dirty = True

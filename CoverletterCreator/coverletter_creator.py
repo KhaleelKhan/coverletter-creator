@@ -61,6 +61,9 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.pb_generateText.clicked.connect(self.generate_text)
 
 		self.connect_all_fields()
+		self.connect_mandatory_fields()
+
+		self.le_companyName.editingFinished.connect(lambda: self.le_companyShortName.setText(self.le_companyName.text()))
 
 	def connect_all_fields(self):
 		for child in self.centralwidget.findChildren(QtWidgets.QLineEdit):
@@ -74,6 +77,15 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		for child in self.centralwidget.findChildren(QtWidgets.QComboBox):
 			#self.cb_recipientSalutation.currentIndexChanged()
 			child.currentIndexChanged.connect(self.setWindowTitleUnsaved)
+
+	def connect_mandatory_fields(self):
+		mandatory_fields_list = [self.le_firstName, self.le_lastName, self.le_mobile, self.le_email, self.le_companyName]
+		for textBox in mandatory_fields_list:
+			textBox.textChanged[str].connect(lambda: self.pb_generatePdf.setEnabled(textBox.text() != ""))
+
+		for textBox in mandatory_fields_list:
+			textBox.textChanged[str].connect(lambda: self.pb_generateText.setEnabled(textBox.text() != ""))
+
 
 	def setWindowTitleUnsaved(self):
 		self.file_dirty = True
@@ -347,6 +359,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.settings.beginGroup("Project")
 		self.filename = str(self.settings.value("filename", self.filename))
 		self.settings.endGroup()
+
 
 	# event : QCloseEvent
 	def closeEvent(self, event):

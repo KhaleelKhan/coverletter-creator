@@ -71,8 +71,8 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			child.mousePressEvent = functools.partial(self.label_clicked, source=child)
 		for child in self.centralwidget.findChildren(QtWidgets.QCheckBox):
 			child.mousePressEvent = functools.partial(self.label_clicked, source=child)
-		self.RECEIPIENTGENDER.mousePressEvent = functools.partial(self.label_clicked, source=self.RECEIPIENTGENDER)
-		self.RECEIPIENTSALUTATION.mousePressEvent = functools.partial(self.label_clicked, source=self.RECEIPIENTSALUTATION)
+		# self.RECEIPIENTGENDER.mousePressEvent = functools.partial(self.label_clicked, source=self.RECEIPIENTGENDER)
+		# self.RECEIPIENTSALUTATION.mousePressEvent = functools.partial(self.label_clicked, source=self.RECEIPIENTSALUTATION)
 
 		self.COMPANYNAME.editingFinished.connect(lambda: self.COMPANYSHORTNAME.setText(self.COMPANYNAME.text()))
 
@@ -184,7 +184,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		company_info.append(RECEIPIENTGENDER)
 
 		RECEIPIENTSALUTATION = Element('RECEIPIENTSALUTATION')
-		RECEIPIENTSALUTATION.text = str(self.cb_recipientSalutation.currentText())
+		RECEIPIENTSALUTATION.text = str(self.RECEIPIENTSALUTATION.currentText())
 		company_info.append(RECEIPIENTSALUTATION)
 
 		about_me = Element('TEXTABOUTME')
@@ -221,6 +221,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 				filename = filename + '.xml'
 			with open(filename, 'wb') as f:
 				f.write(tostring(self.generate_root(), pretty_print=True))
+			self.load_file(filename)
 
 	def open_project(self):
 		filename, _ = QFileDialog.getOpenFileName(self, "Open Project","./","XML Files (*.xml)")

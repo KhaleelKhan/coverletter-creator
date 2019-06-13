@@ -52,18 +52,18 @@
 %	Comment any of the lines below if they are not required
 %-------------------------------------------------------------------------------
 % Available options: circle|rectangle,edge/noedge,left/right
-\BLOCK{ if le_photoPath }
-\photo[circle,noedge,left]{\VAR{le_photoPath}}
+\BLOCK{ if PHOTOPATH }
+\photo[circle,noedge,left]{\VAR{PHOTOPATH}}
 \BLOCK{ endif }
-\name{\VAR{le_firstName}}{\VAR{le_lastName}}
+\name{\VAR{FIRSTNAME}}{\VAR{LASTNAME}}
 %\position{Software Architect{\enskip\cdotp\enskip}Security Expert}
-\address{\VAR{te_personalAddress}}
+\address{\VAR{PERSONALADDRESS}}
 
-\mobile{\VAR{le_mobile}}
-\email{\VAR{le_email}}
-\homepage{\VAR{le_homepage}}
-\github{\VAR{le_githubName}}
-\linkedin{\VAR{le_LinkedinName}}
+\mobile{\VAR{MOBILE}}
+\email{\VAR{EMAIL}}
+\homepage{\VAR{HOMEPAGE}}
+\github{\VAR{GITHUBNAME}}
+\linkedin{\VAR{LINKEDINNAME}}
 % \gitlab{gitlab-id}
 % \stackoverflow{SO-id}{SO-name}
 % \twitter{@twit}
@@ -84,47 +84,45 @@
 %-------------------------------------------------------------------------------
 % The company being applied to
 \recipient
-  {\VAR{le_department}}
-  {\VAR{le_companyName}\\
-\VAR{te_companyAddress}}
+  {\VAR{DEPARTMENT}}
+  {\VAR{COMPANYNAME}\\
+\VAR{COMPANYADDRESS}}
 % The date on the letter, default is the date of compilation
 \letterdate{\today}
 
 % The title of the letter
-\BLOCK{ if le_Lettertitle }
-\lettertitle{\VAR{le_Lettertitle}}
+\BLOCK{ if LETTERTITLE }
+\lettertitle{\VAR{LETTERTITLE}}
 \BLOCK{ endif }
 
-\BLOCK{ if le_jobTitle }
-\jobtitle{\VAR{le_jobTitle}}
+\BLOCK{ if JOBTITLE }
+\jobtitle{\VAR{JOBTITLE}}
 \BLOCK{ endif }
 
-\BLOCK{ if le_jobRefId }
-\jobrefid{\VAR{le_jobRefId}}
+\BLOCK{ if JOBREFID }
+\jobrefid{\VAR{JOBREFID}}
 \BLOCK{ endif }
 
 % How the letter is opened
-\letteropening{Dear \BLOCK{ if receipientGender == '0' }
-Mr. \VAR{le_RecepientName}
-\BLOCK{ elif receipientGender == '1' }
-Ms. \VAR{le_RecepientName}
-\BLOCK{ else }
+\letteropening{\VAR{RECEIPIENTSALUTATION} \BLOCK{ if RECEIPIENTGENDER == 'Unknown' }
 Sir / Madam
+\BLOCK{ else }
+\VAR{RECEIPIENTGENDER} \VAR{RECEIPIENTNAME}
 \BLOCK{ endif }
 ,}
 % How the letter is closed
-\letterclosing{\VAR{le_closing},}
+\letterclosing{\VAR{CLOSINGSALUTATION},}
 % Any enclosures with the letter
-\letterenclosure[\VAR{le_enclosing}]{\BLOCK{ if cb_CV == 'True' }
+\letterenclosure[\VAR{ENCLOSINGPREFIX}]{\BLOCK{ if CVATTACHED == 'True' }
 Curriculum Vitae
 \BLOCK{ endif}
-\BLOCK{ if cb_certificates == 'True' }
+\BLOCK{ if CERTIFICATESATTACHED == 'True' }
 , Certificates
 \BLOCK{ endif}
-\BLOCK{ if cb_Transcripts == 'True' }
+\BLOCK{ if TRANSCRIPTSATTACHED == 'True' }
 , Transcripts
 \BLOCK{ endif}
-\BLOCK{ if cb_referenceLetters == 'True' }
+\BLOCK{ if REFLETTERSATTACHED == 'True' }
 , Reference Letters
 \BLOCK{ endif}
 }
@@ -153,13 +151,13 @@ Curriculum Vitae
 \begin{cvletter}
 
 \lettersection{About Me}
-\VAR{te_aboutMe}
+\VAR{TEXTABOUTME}
 
-\lettersection{Why \VAR{le_companyShortName}?}
-\VAR{te_WhyFirm}
+\lettersection{Why \VAR{COMPANYSHORTNAME}?}
+\VAR{TEXTWHYTHISFIRM}
 
 \lettersection{Why Me?}
-\VAR{te_whyYou}
+\VAR{TEXTWHYYOU}
 
 \end{cvletter}
 

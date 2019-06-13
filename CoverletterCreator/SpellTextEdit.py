@@ -7,11 +7,13 @@ __license__ = 'MIT'
 __copyright__ = '2009, John Schember '
 __docformat__ = 'restructuredtext en'
 
+import os
 import re
 import sys
 
 import enchant
 from PyQt5.QtCore import QEvent
+from PyQt5.QtCore import QStandardPaths
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QMouseEvent
@@ -29,10 +31,21 @@ class SpellTextEdit(QPlainTextEdit):
     def __init__(self, *args):
         QPlainTextEdit.__init__(self, *args)
 
-        # Default dictionary based on the current locale.
-        self.dict = enchant.Dict()
+        # Path for custom dict
+        custom_dict_path = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
+        custom_dict_filename = 'customWords'
+        self.custom_dict = os.path.join(custom_dict_path, custom_dict_filename)
+        os.makedirs(os.path.dirname(self.custom_dict), exist_ok=True)
+        with open(self.custom_dict, 'a+'):
+            pass
+
+        # Default dictionary based on the local locale.
+        d = enchant.Dict()
+        self.dict = enchant.DictWithPWL(tag=d.tag, pwl=self.custom_dict)
+
         self.highlighter = Highlighter(self.document())
         self.highlighter.setDict(self.dict)
+
 
     def mousePressEvent(self, event):
         if event.button() == Qt.RightButton:
@@ -60,6 +73,9 @@ class SpellTextEdit(QPlainTextEdit):
                     action = SpellAction(word, spell_menu)
                     action.correct.connect(self.correctWord)
                     spell_menu.addAction(action)
+                spell_menu.addSeparator()
+                action = spell_menu.addAction('Add to Dictionary')
+                action.triggered.connect(lambda: self.addWord(text))
                 # Only add the spelling suggests to the menu if there are
                 # suggestions.
                 if len(spell_menu.actions()) != 0:
@@ -80,6 +96,10 @@ class SpellTextEdit(QPlainTextEdit):
 
         cursor.endEditBlock()
 
+    def addWord(self, word):
+        self.dict.add_to_pwl(word)
+        self.highlighter.setDict(self.dict)
+        self.highlighter.rehighlight()
 
 class Highlighter(QSyntaxHighlighter):
 

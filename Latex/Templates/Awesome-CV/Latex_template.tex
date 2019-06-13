@@ -104,12 +104,10 @@
 \BLOCK{ endif }
 
 % How the letter is opened
-\letteropening{Dear \BLOCK{ if receipientGender == '0' }
-Mr. \VAR{le_RecepientName}
-\BLOCK{ elif receipientGender == '1' }
-Ms. \VAR{le_RecepientName}
-\BLOCK{ else }
+\letteropening{\VAR{receipientSalutation} \BLOCK{ if receipientGender == 'Unknown' }
 Sir / Madam
+\BLOCK{ else }
+\VAR{receipientGender} \VAR{le_RecepientName}
 \BLOCK{ endif }
 ,}
 % How the letter is closed

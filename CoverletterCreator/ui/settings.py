@@ -226,3 +226,4 @@ class Ui_SettingsWindow(object):
         self.cb_open_text_after.setText(_translate("SettingsWindow", "Open text file after compiling"))
 
 
+import CoverletterCreator.ui.resources_rc

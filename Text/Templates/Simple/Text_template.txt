@@ -16,14 +16,14 @@ To,
 {{LETTERTITLE}} {{JOBTITLE}}
 Job Reference ID: {{JOBREFID}}
 
-Dear {% if RECEIPIENTGENDER == '0' %}
-Mr. {{RECEIPIENTNAME}},
-{% elif RECEIPIENTGENDER == '1' %}
-Ms. {{RECEIPIENTNAME}},
-{% else -%}
-Sir / Madam,
+{{RECEIPIENTSALUTATION}} {% if RECEIPIENTGENDER == 'Unknown' -%}
+Sir / Madam
+{%- else %}
+{{RECEIPIENTGENDER}} {{RECEIPIENTNAME}}
+{% endif -%}
+,
 
-{% endif %}
+
 
 
 {#-------------------------------------------------------------------------------#}

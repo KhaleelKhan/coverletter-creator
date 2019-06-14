@@ -1,10 +1,12 @@
 Requirements
 ============
 
-* Latex (depends on template used), Install using
+* Latex (depends on template used), Install using:
+
 ```console
 $ sudo apt install texlive-full
 ```
+
 * Python 3.6
 
 Python packages:
@@ -15,9 +17,10 @@ Python packages:
 * PyQt5==5.12.2
 * PyQt5-sip==4.19.17
 
-run in your shell: 
+run in your shell:
+
 ```console
-pip install -r requirements.txt 
+$ pip install -r requirements.txt 
 ```
 
 Usage
@@ -51,7 +54,7 @@ Add content to About me, why this firm? and why you? tab as you require. Keep it
 ![Aboutme Tab](docs/images/aboutme_tab.png "About me Tab")
 
 
-Finally in Finish tab add closing salutation and then select attached documents. Then click on `Generate PDF` or `Generate Text` button.
+Finally in Finish tab add closing salutation and then select attached documents. Then click on <kbd>Generate PDF</kbd> or <kbd>Generate Text</kbd> button.
 
 ![Finish Tab](docs/images/finish_tab.png "Finish me Tab")
 
@@ -97,6 +100,8 @@ Variable names that can be used in templates can be easily copied by clicking on
 
 Variables can be used as the jinja documentation defines. Along with any control statements.
 
+***
+
 Example of Variable usage:
 
 Latex:
@@ -110,6 +115,7 @@ Text:
 ```python
 {{FIRSTNAME}}
 ```
+***
 
 Example of control statements:
 
@@ -134,5 +140,12 @@ Sir / Madam
 {% endif -%}
 ,
 ```
+***
 
-See example templates [Latex Template](Latex/Templates/Awesome-CV/Latex_template.tex) and [Text Template](Text/Templates/Simple/Text_template.txt)
+See example templates [Latex Template](Latex/Templates/Awesome-CV/Latex_template.tex) and [Text Template](Text/Templates/Simple/Text_template.txt) for more indept usage.
+
+Credits
+=======
+
+* Latex template used: [posquit0's Awesome-CV](https://github.com/posquit0/Awesome-CV)
+* Spell check modified from this [blog](https://nachtimwald.com/2009/08/22/qplaintextedit-with-in-line-spell-check/)

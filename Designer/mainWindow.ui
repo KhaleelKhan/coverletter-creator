@@ -371,6 +371,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="SpellTextEdit" name="TEXTABOUTME">
+          <property name="plainText">
+           <string notr="true"/>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tabWhyFirm">
@@ -388,6 +395,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="SpellTextEdit" name="TEXTWHYTHISFIRM">
+          <property name="plainText">
+           <string notr="true"/>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="tabWhyYou">
@@ -402,6 +416,13 @@
           </property>
           <property name="text">
            <string>Specify why you are the perfect fit for this job?</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="SpellTextEdit" name="TEXTWHYYOU">
+          <property name="plainText">
+           <string notr="true"/>
           </property>
          </widget>
         </item>
@@ -606,27 +627,10 @@
    </widget>
    <widget class="QMenu" name="menuOutput">
     <property name="title">
-     <string>Output</string>
+     <string>Options</string>
     </property>
-    <widget class="QMenu" name="menuLatex">
-     <property name="title">
-      <string>Latex</string>
-     </property>
-     <addaction name="actionSet_LatexTemplate"/>
-     <addaction name="actionSet_LatexOutputDirectory"/>
-     <addaction name="actionCompiler_2"/>
-    </widget>
-    <widget class="QMenu" name="menuText">
-     <property name="title">
-      <string>Text</string>
-     </property>
-     <addaction name="actionText_Template"/>
-     <addaction name="actionSet_TextOutputDirectory"/>
-    </widget>
     <addaction name="separator"/>
-    <addaction name="menuLatex"/>
-    <addaction name="menuText"/>
-    <addaction name="separator"/>
+    <addaction name="actionSettings"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuOutput"/>
@@ -693,7 +697,19 @@
     <string>Set Output Directory</string>
    </property>
   </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+  </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SpellTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header>CoverletterCreator/SpellTextEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -8,28 +8,28 @@ https://github.com/{{GITHUBNAME}}/
 https://www.linkedin.com/in/{{LINKEDINNAME}}/
 
 {# The company being applied to #}
+
 To,
 {{COMPANYNAME}}
 {{COMPANYADDRESS}}
 
 {# The title of the letter #}
+
 {{LETTERTITLE}} {{JOBTITLE}}
 Job Reference ID: {{JOBREFID}}
 
-Dear {% if RECEIPIENTGENDER == '0' %}
-Mr. {{RECEIPIENTNAME}},
-{% elif RECEIPIENTGENDER == '1' %}
-Ms. {{RECEIPIENTNAME}},
-{% else -%}
-Sir / Madam,
+{% if RECEIPIENTGENDER == 'Unknown' %}
+{{RECEIPIENTSALUTATION}}  Sir / Madam,
+
+{% else %}
+{{RECEIPIENTSALUTATION}} {{RECEIPIENTGENDER}} {{RECEIPIENTNAME}},
 
 {% endif %}
 
 
 {#-------------------------------------------------------------------------------#}
-{#	LETTER CONTENT #}
+{#	LETTER CONTENT 								 #}
 {#-------------------------------------------------------------------------------#}
-
 
 About Me
 --------

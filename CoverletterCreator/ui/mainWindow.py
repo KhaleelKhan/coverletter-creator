@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 
 class Ui_MainWindow(object):
@@ -169,6 +169,10 @@ class Ui_MainWindow(object):
         self.label_17 = QtWidgets.QLabel(self.tabAboutMe)
         self.label_17.setObjectName("label_17")
         self.verticalLayout_AboutMeTab.addWidget(self.label_17, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
+        self.TEXTABOUTME = SpellTextEdit(self.tabAboutMe)
+        self.TEXTABOUTME.setPlainText("")
+        self.TEXTABOUTME.setObjectName("TEXTABOUTME")
+        self.verticalLayout_AboutMeTab.addWidget(self.TEXTABOUTME)
         self.mainTabWidget.addTab(self.tabAboutMe, "")
         self.tabWhyFirm = QtWidgets.QWidget()
         self.tabWhyFirm.setObjectName("tabWhyFirm")
@@ -177,6 +181,10 @@ class Ui_MainWindow(object):
         self.label_18 = QtWidgets.QLabel(self.tabWhyFirm)
         self.label_18.setObjectName("label_18")
         self.verticalLayout_WhyFirmTab.addWidget(self.label_18, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
+        self.TEXTWHYTHISFIRM = SpellTextEdit(self.tabWhyFirm)
+        self.TEXTWHYTHISFIRM.setPlainText("")
+        self.TEXTWHYTHISFIRM.setObjectName("TEXTWHYTHISFIRM")
+        self.verticalLayout_WhyFirmTab.addWidget(self.TEXTWHYTHISFIRM)
         self.mainTabWidget.addTab(self.tabWhyFirm, "")
         self.tabWhyYou = QtWidgets.QWidget()
         self.tabWhyYou.setObjectName("tabWhyYou")
@@ -185,6 +193,10 @@ class Ui_MainWindow(object):
         self.label_19 = QtWidgets.QLabel(self.tabWhyYou)
         self.label_19.setObjectName("label_19")
         self.verticalLayout_WhyYouTab.addWidget(self.label_19, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
+        self.TEXTWHYYOU = SpellTextEdit(self.tabWhyYou)
+        self.TEXTWHYYOU.setPlainText("")
+        self.TEXTWHYYOU.setObjectName("TEXTWHYYOU")
+        self.verticalLayout_WhyYouTab.addWidget(self.TEXTWHYYOU)
         self.mainTabWidget.addTab(self.tabWhyYou, "")
         self.tabFinish = QtWidgets.QWidget()
         self.tabFinish.setObjectName("tabFinish")
@@ -264,10 +276,6 @@ class Ui_MainWindow(object):
         self.menuFile.setObjectName("menuFile")
         self.menuOutput = QtWidgets.QMenu(self.menubar)
         self.menuOutput.setObjectName("menuOutput")
-        self.menuLatex = QtWidgets.QMenu(self.menuOutput)
-        self.menuLatex.setObjectName("menuLatex")
-        self.menuText = QtWidgets.QMenu(self.menuOutput)
-        self.menuText.setObjectName("menuText")
         MainWindow.setMenuBar(self.menubar)
         self.actionNew = QtWidgets.QAction(MainWindow)
         self.actionNew.setObjectName("actionNew")
@@ -289,21 +297,16 @@ class Ui_MainWindow(object):
         self.actionCompiler_2.setObjectName("actionCompiler_2")
         self.actionSet_TextOutputDirectory = QtWidgets.QAction(MainWindow)
         self.actionSet_TextOutputDirectory.setObjectName("actionSet_TextOutputDirectory")
+        self.actionSettings = QtWidgets.QAction(MainWindow)
+        self.actionSettings.setObjectName("actionSettings")
         self.menuFile.addAction(self.actionNew)
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSave_As)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionExit)
-        self.menuLatex.addAction(self.actionSet_LatexTemplate)
-        self.menuLatex.addAction(self.actionSet_LatexOutputDirectory)
-        self.menuLatex.addAction(self.actionCompiler_2)
-        self.menuText.addAction(self.actionText_Template)
-        self.menuText.addAction(self.actionSet_TextOutputDirectory)
         self.menuOutput.addSeparator()
-        self.menuOutput.addAction(self.menuLatex.menuAction())
-        self.menuOutput.addAction(self.menuText.menuAction())
-        self.menuOutput.addSeparator()
+        self.menuOutput.addAction(self.actionSettings)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuOutput.menuAction())
 
@@ -392,9 +395,7 @@ class Ui_MainWindow(object):
         self.pb_generateText.setText(_translate("MainWindow", "Generate Text"))
         self.mainTabWidget.setTabText(self.mainTabWidget.indexOf(self.tabFinish), _translate("MainWindow", "Finish"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
-        self.menuOutput.setTitle(_translate("MainWindow", "Output"))
-        self.menuLatex.setTitle(_translate("MainWindow", "Latex"))
-        self.menuText.setTitle(_translate("MainWindow", "Text"))
+        self.menuOutput.setTitle(_translate("MainWindow", "Options"))
         self.actionNew.setText(_translate("MainWindow", "New"))
         self.actionNew.setShortcut(_translate("MainWindow", "Ctrl+N"))
         self.actionOpen.setText(_translate("MainWindow", "Open"))
@@ -409,15 +410,7 @@ class Ui_MainWindow(object):
         self.actionText_Template.setText(_translate("MainWindow", "Set Template"))
         self.actionCompiler_2.setText(_translate("MainWindow", "Compiler"))
         self.actionSet_TextOutputDirectory.setText(_translate("MainWindow", "Set Output Directory"))
+        self.actionSettings.setText(_translate("MainWindow", "Settings"))
 
 
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+from CoverletterCreator.SpellTextEdit import SpellTextEdit

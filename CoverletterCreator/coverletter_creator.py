@@ -7,8 +7,9 @@ import sys
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QFileDialog
-from lxml.etree import Element, tostring, XML
+from lxml.etree import Element, tostring, XML, XMLSyntaxError
 
+from CoverletterCreator.SettingsHandler import SettingsHandler
 from CoverletterCreator.SpellTextEdit import SpellTextEdit
 from CoverletterCreator.pdfCreator import PdfCreator
 from CoverletterCreator.textCreator import TextCreator
@@ -21,40 +22,22 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.setupUi(self)
 
 		self.mainTitle = "Coverletter Creator"
-		self.settings = QSettings("KhaleelKhan", "Coverletter_Creator-dev")
+		self.config = QSettings("KhaleelKhan", "Coverletter_Creator-dev")
+		self.settings = SettingsHandler(parent=self, settings=self.config)
 
 		self.clipboard = QtWidgets.QApplication.clipboard()
-
-		# Create text editors with spell-check
-		self.TEXTABOUTME = SpellTextEdit(self.tabAboutMe)
-		self.TEXTABOUTME.setObjectName("TEXTABOUTME")
-		self.verticalLayout_AboutMeTab.addWidget(self.TEXTABOUTME)
-
-		self.TEXTWHYTHISFIRM = SpellTextEdit(self.tabWhyFirm)
-		self.TEXTWHYTHISFIRM.setObjectName("TEXTWHYTHISFIRM")
-		self.verticalLayout_WhyFirmTab.addWidget(self.TEXTWHYTHISFIRM)
-
-		self.TEXTWHYYOU = SpellTextEdit(self.tabWhyYou)
-		self.TEXTWHYYOU.setObjectName("TEXTWHYYOU")
-		self.verticalLayout_WhyYouTab.addWidget(self.TEXTWHYYOU)
 
 		self.actionNew.triggered.connect(self.new_project)
 		self.actionSave.triggered.connect(self.save_project)
 		self.actionSave_As.triggered.connect(self.saveas_project)
 		self.actionOpen.triggered.connect(self.open_project)
 		self.actionExit.triggered.connect(self.close)
-		self.actionSet_LatexTemplate.triggered.connect(self.get_latex_template)
-		self.actionSet_LatexOutputDirectory.triggered.connect(self.get_latex_dir)
-		self.actionText_Template.triggered.connect(self.get_text_template)
-		self.actionSet_TextOutputDirectory.triggered.connect(self.get_text_dir)
+		self.actionSettings.triggered.connect(self.settings.show)
+
 
 		# Set default values
 		self.filename = "untitled.xml"
 		self.file_dirty = False
-		self.latex_template = 'Latex/Templates/Awesome-CV/Latex_template.tex'
-		self.latex_dir = os.path.abspath('Latex/Output')
-		self.text_template = 'Text/Templates/Simple/Text_template.txt'
-		self.text_dir = os.path.abspath('Text/Output')
 
 		self.readSettings()
 		self.load_file(self.filename)
@@ -274,6 +257,11 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			self.file_dirty = False
 			print("Warning: File not found!")
 
+		except XMLSyntaxError:
+			QtWidgets.QMessageBox.critical(self, "XML Read Failed",
+										   "Cannot read xml file %s. \n\nMake sure the xml file is not blank " % filename)
+
+
 	def browse_photo(self):
 		fname, _ = QFileDialog.getOpenFileName(self, 'Open profile photo',
 											   './', "Image files (*.jpg *.png)")
@@ -293,88 +281,51 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.label_pic.setPixmap(
 			QtGui.QPixmap(fname).scaled(160, 160, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation))
 
-	def get_latex_template(self):
-		latex_template, _ = QFileDialog.getOpenFileName(self, "Open latex template", "./", "Latex Files (*.tex)")
-		if latex_template:
-			self.latex_template = latex_template
-
-	def get_latex_dir(self):
-		latex_dir = QFileDialog.getExistingDirectory(self, 'Latex output directory', './')
-		if latex_dir:
-			self.latex_dir = os.path.abspath(latex_dir)
-
-	def get_text_template(self):
-		template, _ = QFileDialog.getOpenFileName(self, "Open text template", "./", "Text Files (*.txt)")
-		if template:
-			self.text_template = template
-
-	def get_text_dir(self):
-		text_dir = QFileDialog.getExistingDirectory(self, 'Text output directory', './')
-		if text_dir:
-			self.text_dir = os.path.abspath(text_dir)
-
 	def generate_pdf(self):
 		pdfcreator = PdfCreator(data=self.generate_root())
-		pdfcreator.read_template(template=self.latex_template)
+		pdfcreator.read_template(template=self.settings.latex_template)
 		pdfcreator.convert_to_dict()
 		pdfcreator.render_template()
 		filename = self.COMPANYSHORTNAME.text() + '_' + self.JOBREFID.text() + '_Coverletter'
 		filename = "".join(i for i in filename if i not in ".\/:*?<>|").replace(r' ', '_')
-		pdfcreator.compile_xelatex(pdfname=filename+".pdf", outputDir=self.latex_dir,
-									photo=self.PHOTOPATH.text())
+		try:
+			pdfcreator.compile_xelatex(compiler=self.settings.get_latex_compiler(), pdfname=filename+".pdf",
+									outputDir=self.settings.latex_dir, photo=self.PHOTOPATH.text(),
+									open_pdf=self.settings.open_pdf, keep_tex=self.settings.keep_tex)
+		except FileNotFoundError:
+			QtWidgets.QMessageBox.critical(self, "PDF Compilation Failed", "Cannot complete command %s." % self.settings.get_latex_compiler())
 
 	def generate_text(self):
 		textcreator = TextCreator(data=self.generate_root())
-		textcreator.read_template(template=self.text_template)
+		textcreator.read_template(template=self.settings.text_template)
 		textcreator.convert_to_dict()
 		textcreator.render_template()
 		filename = self.COMPANYSHORTNAME.text() + '_' + self.JOBREFID.text() + '_Coverletter'
-		filename = "".join(i for i in filename if i not in ".\/:*?<>|").replace(r' ', '_')
-		textcreator.compile_text(textname=filename+".txt", outputDir=self.text_dir)
+		filename = "".join(i for i in filename if i not in ".\/:    *?<>|").replace(r' ', '_')
+		textcreator.compile_text(textname=filename+".txt", outputDir=self.settings.text_dir, open_text=self.settings.open_text)
 
 	def writeSettings(self):
-		self.settings.beginGroup("MainWindow")
-		self.settings.setValue("size", self.size())
-		self.settings.setValue("pos", self.pos())
-		self.settings.endGroup()
-
-		self.settings.beginGroup("Templates")
-		self.settings.setValue("latex", str(self.latex_template))
-		self.settings.setValue("text", str(self.text_template))
-		self.settings.endGroup()
-
-		self.settings.beginGroup("Outputs")
-		self.settings.setValue("latex", str(self.latex_dir))
-		self.settings.setValue("text", str(self.text_dir))
-		self.settings.endGroup()
+		self.config.beginGroup("MainWindow")
+		self.config.setValue("size", self.size())
+		self.config.setValue("pos", self.pos())
+		self.config.endGroup()
 
 		if not self.file_dirty:
-			self.settings.beginGroup("Project")
-			self.settings.setValue("filename", str(self.filename))
-			self.settings.endGroup()
+			self.config.beginGroup("Project")
+			self.config.setValue("filename", str(self.filename))
+			self.config.endGroup()
 
-		self.settings.sync()
+		self.config.sync()
 
 	def readSettings(self):
-		self.settings.beginGroup("MainWindow")
-		self.resize(self.settings.value("size", QtCore.QSize(616, 466)))
-		self.move(self.settings.value("pos", QtCore.QPoint(200, 200)))
-		self.settings.endGroup()
+		self.config.beginGroup("MainWindow")
+		self.resize(self.config.value("size", QtCore.QSize(616, 466)))
+		self.move(self.config.value("pos", QtCore.QPoint(200, 200)))
+		self.config.endGroup()
 
-		self.settings.beginGroup("Templates")
-		self.latex_template = str(self.settings.value("latex", self.latex_template))
-		self.text_template = str(self.settings.value("text", self.text_template))
-		self.settings.endGroup()
-
-		self.settings.beginGroup("Outputs")
-		self.latex_dir = str(self.settings.value("latex", self.latex_dir))
-		self.text_dir = str(self.settings.value("text", self.text_dir))
-		self.settings.endGroup()
-
-		self.settings.beginGroup("Project")
-		self.filename = str(self.settings.value("filename", self.filename))
-		self.settings.endGroup()
-
+		self.config.beginGroup("Project")
+		self.filename = str(self.config.value("filename", self.filename))
+		self.config.endGroup()
 
 	# event : QCloseEvent
 	def closeEvent(self, event):

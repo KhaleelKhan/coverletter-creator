@@ -26,7 +26,7 @@ class TextCreator():
 				temp_dict[str(element.tag)] = str(element.text)
 		self.render_dict = temp_dict
 
-	def compile_text(self, textname, outputDir):
+	def compile_text(self, textname, outputDir, open_text=True):
 		"""
 		Genertates the text from string
 		"""
@@ -37,10 +37,11 @@ class TextCreator():
 		with open(outputFile, 'w+') as f:
 			f.write(self.renderer_template)
 
-		if sys.platform.startswith('linux'):
-			subprocess.call(["xdg-open", outputFile])
-		else:
-			os.startfile(os.path.join(outputDir, outputFile))
+		if open_text:
+			if sys.platform.startswith('linux'):
+				subprocess.call(["xdg-open", outputFile])
+			else:
+				os.startfile(os.path.join(outputDir, outputFile))
 
 
 

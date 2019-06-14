@@ -3,6 +3,8 @@ import sys
 
 import jinja2
 
+from CoverletterCreator.SettingsHandler import SettingsHandler
+
 latex_jinja_env = jinja2.Environment(
 	block_start_string='\BLOCK{',
 	block_end_string='}',
@@ -37,7 +39,7 @@ class PdfCreator():
 				temp_dict[str(element.tag)] = str(element.text).replace('\n', r'\\')
 		self.render_dict = temp_dict
 
-	def compile_xelatex(self, pdfname, outputDir, photo):
+	def compile_xelatex(self, compiler, pdfname, outputDir, photo, open_pdf=True, keep_tex=True):
 		"""
 		Genertates the pdf from string
 		"""
@@ -56,19 +58,30 @@ class PdfCreator():
 		f.write(self.renderer_template)
 		f.close()
 
-		proc = subprocess.Popen(['xelatex', '-interaction=nonstopmode', 'coverletter.tex'])
-		proc.communicate()
-
-		os.rename('coverletter.pdf', pdfname)
-		shutil.copy(pdfname, outputDir)
-		shutil.copy('coverletter.tex', outputDir)
-		shutil.rmtree(temp)
-		os.chdir(current)
-
-		if sys.platform.startswith('linux'):
-			subprocess.call(["xdg-open", os.path.join(outputDir, pdfname)])
+		if compiler in SettingsHandler.latex_compiler_list:
+			proc = subprocess.Popen([compiler, '-interaction=nonstopmode', 'coverletter.tex'])
 		else:
-			os.startfile(os.path.join(outputDir, pdfname))
+			proc = subprocess.Popen([compiler, 'coverletter.tex'])
+		try:
+			proc.communicate()
+		except subprocess.CalledProcessError as e:
+			raise ChildProcessError
+
+		try:
+			os.rename('coverletter.pdf', pdfname)
+			shutil.copy(pdfname, outputDir)
+			if keep_tex:
+				shutil.copy('coverletter.tex', outputDir)
+			shutil.rmtree(temp)
+			os.chdir(current)
+		except FileNotFoundError:
+			raise FileNotFoundError
+
+		if open_pdf:
+			if sys.platform.startswith('linux'):
+				subprocess.call(["xdg-open", os.path.join(outputDir, pdfname)])
+			else:
+				os.startfile(os.path.join(outputDir, pdfname))
 
 
 if __name__ == "__main__":

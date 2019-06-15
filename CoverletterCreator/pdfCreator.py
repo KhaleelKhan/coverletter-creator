@@ -4,6 +4,7 @@ import sys
 import jinja2
 
 from CoverletterCreator.SettingsHandler import SettingsHandler
+from CoverletterCreator.ProgressDisplay import ProgressDisplay
 
 latex_jinja_env = jinja2.Environment(
 	block_start_string='\BLOCK{',
@@ -24,6 +25,7 @@ class PdfCreator():
 	def __init__(self, data, parent=None):
 		super(PdfCreator, self).__init__()
 		self.lxml_data = data
+		self.parent = parent
 
 	def read_template(self, template):
 		# TODO: test if template file exists
@@ -59,13 +61,12 @@ class PdfCreator():
 		f.close()
 
 		if compiler in SettingsHandler.latex_compiler_list:
-			proc = subprocess.Popen([compiler, '-interaction=nonstopmode', 'coverletter.tex'])
+			args = ['-interaction=nonstopmode', 'coverletter.tex']
 		else:
-			proc = subprocess.Popen([compiler, 'coverletter.tex'])
-		try:
-			proc.communicate()
-		except subprocess.CalledProcessError as e:
-			raise ChildProcessError
+			args = ['coverletter.tex']
+		progress_display = ProgressDisplay(parent=self.parent, executable=compiler, arguments=args)
+		progress_display.exec_()
+		progress_display.show()
 
 		try:
 			os.rename('coverletter.pdf', pdfname)
@@ -83,6 +84,11 @@ class PdfCreator():
 			else:
 				os.startfile(os.path.join(outputDir, pdfname))
 
+	def dataReady(self):
+		cursor = self.progress_display.log_display.textCursor()
+		cursor.movePosition(cursor.End)
+		cursor.insertText(str(self.process.readAll()))
+		self.progress_display.log_display.ensureCursorVisible()
 
 if __name__ == "__main__":
 	pdfcreator = PdfCreator()

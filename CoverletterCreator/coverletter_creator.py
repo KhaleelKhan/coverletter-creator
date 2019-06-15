@@ -282,18 +282,21 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			QtGui.QPixmap(fname).scaled(160, 160, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation))
 
 	def generate_pdf(self):
-		pdfcreator = PdfCreator(data=self.generate_root())
+		pdfcreator = PdfCreator(data=self.generate_root(), parent=self)
 		pdfcreator.read_template(template=self.settings.latex_template)
 		pdfcreator.convert_to_dict()
 		pdfcreator.render_template()
 		filename = self.COMPANYSHORTNAME.text() + '_' + self.JOBREFID.text() + '_Coverletter'
 		filename = "".join(i for i in filename if i not in ".\/:*?<>|").replace(r' ', '_')
+
+		self.pb_generatePdf.setEnabled(False)
 		try:
 			pdfcreator.compile_xelatex(compiler=self.settings.get_latex_compiler(), pdfname=filename+".pdf",
 									outputDir=self.settings.latex_dir, photo=self.PHOTOPATH.text(),
 									open_pdf=self.settings.open_pdf, keep_tex=self.settings.keep_tex)
 		except FileNotFoundError:
 			QtWidgets.QMessageBox.critical(self, "PDF Compilation Failed", "Cannot complete command %s." % self.settings.get_latex_compiler())
+		self.pb_generatePdf.setEnabled(True)
 
 	def generate_text(self):
 		textcreator = TextCreator(data=self.generate_root())
@@ -302,7 +305,9 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		textcreator.render_template()
 		filename = self.COMPANYSHORTNAME.text() + '_' + self.JOBREFID.text() + '_Coverletter'
 		filename = "".join(i for i in filename if i not in ".\/:    *?<>|").replace(r' ', '_')
+		self.pb_generateText.setEnabled(False)
 		textcreator.compile_text(textname=filename+".txt", outputDir=self.settings.text_dir, open_text=self.settings.open_text)
+		self.pb_generateText.setEnabled(True)
 
 	def writeSettings(self):
 		self.config.beginGroup("MainWindow")

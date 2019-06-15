@@ -6,9 +6,9 @@ RESOURCE_DIR = Designer
 COMPILED_DIR = CoverletterCreator/ui
  
 #UI files to compile
-UI_FILES = mainWindow.ui settings.ui
+UI_FILES = mainWindow.ui settings.ui progress.ui
 #Qt resource files to compile
-RESOURCES = resources.qrc 
+RESOURCES = CoverletterCreator.ui.resources.qrc 
  
 #pyuic5 and pyrcc5 binaries
 PYUIC = pyuic5
@@ -30,7 +30,7 @@ $(COMPILED_DIR)/%.py : $(RESOURCE_DIR)/%.ui
 	$(PYUIC) $< -o $@
  
 $(COMPILED_DIR)/%_rc.py : $(RESOURCE_DIR)/%.qrc
-	$(PYRCC) $< -o $@
+	$(PYRCC) $< -o $(COMPILED_DIR)/resources_rc.py
  
 clean : 
 	$(RM) $(COMPILED_UI) $(COMPILED_RESOURCES) $(COMPILED_UI:.py=.pyc) $(COMPILED_RESOURCES:.py=.pyc)  

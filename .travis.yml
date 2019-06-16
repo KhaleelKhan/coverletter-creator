@@ -5,14 +5,12 @@ python:
   - "3.6"
   - "3.7"
   - "3.7-dev"  # 3.7 development branch
-env:
-  - QT_DEBUG_PLUGINS=1
 cache: pip
 services: 
   - xvfb
 before_install:
   - sudo apt-get install python-enchant
-  - sudo apt install libxkbcommon-x11-0
+  - sudo apt-get install libxkbcommon-x11-0
 install:
   - pip install -r requirements.txt
 script:

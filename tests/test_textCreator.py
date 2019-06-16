@@ -1,9 +1,10 @@
-from unittest import TestCase
+import unittest
 from CoverletterCreator.textCreator import TextCreator
 from lxml.etree import XML
 import jinja2
 
-class TestTextCreator(TestCase):
+
+class TestTextCreator(unittest.TestCase):
 	def setUp(self):
 		xml = XML("<root><personal_info><FIRSTNAME>Max</FIRSTNAME></personal_info></root>")
 		self.text_creator = TextCreator(data=xml)
@@ -26,3 +27,6 @@ class TestTextCreator(TestCase):
 		self.assertIsInstance(self.text_creator.render_dict, dict)
 		self.assertEqual(self.text_creator.render_dict["FIRSTNAME"], "Max")
 
+
+if __name__ == '__main__':
+	unittest.main()

@@ -84,11 +84,6 @@ class PdfCreator():
 			else:
 				os.startfile(os.path.join(outputDir, pdfname))
 
-	def dataReady(self):
-		cursor = self.progress_display.log_display.textCursor()
-		cursor.movePosition(cursor.End)
-		cursor.insertText(str(self.process.readAll()))
-		self.progress_display.log_display.ensureCursorVisible()
 
 if __name__ == "__main__":
 	pdfcreator = PdfCreator()

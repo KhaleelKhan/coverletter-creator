@@ -1,0 +1,18 @@
+dist: xenial   # required for Python >= 3.7
+language: python
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.7-dev"  # 3.7 development branch
+cache: pip
+services: 
+  - xvfb
+before_install:
+  - sudo apt-get install python-enchant
+  - sudo apt-get install python3-pyqt5
+  - sudo apt-get install texlive
+install:
+  - pip install -r requirements.txt
+script:
+  - python -m unittest

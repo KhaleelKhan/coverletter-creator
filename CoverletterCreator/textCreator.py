@@ -11,7 +11,6 @@ class TextCreator():
 		self.lxml_data = data
 
 	def read_template(self, template):
-		# TODO: test if template file exists
 		with open(os.path.realpath(template), 'r') as f:
 			template_str = f.read()
 			self.template = jinja2.Template(template_str)
@@ -26,7 +25,7 @@ class TextCreator():
 				temp_dict[str(element.tag)] = str(element.text)
 		self.render_dict = temp_dict
 
-	def compile_text(self, textname, outputDir):
+	def compile_text(self, textname, outputDir, open_text=True):
 		"""
 		Genertates the text from string
 		"""
@@ -37,14 +36,9 @@ class TextCreator():
 		with open(outputFile, 'w+') as f:
 			f.write(self.renderer_template)
 
-		if sys.platform.startswith('linux'):
-			subprocess.call(["xdg-open", outputFile])
-		else:
-			os.startfile(os.path.join(outputDir, outputFile))
+		if open_text:
+			if sys.platform.startswith('linux'):
+				subprocess.call(["xdg-open", outputFile])
+			else:
+				os.startfile(os.path.join(outputDir, outputFile))
 
-
-
-if __name__ == "__main__":
-	textcreator = TextCreator()
-	textcreator.read_template()
-	textcreator.render_template()

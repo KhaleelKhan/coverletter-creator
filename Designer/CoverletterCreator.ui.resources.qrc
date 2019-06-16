@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>notokay.png</file>
+    <file>okay.png</file>
+  </qresource>
+  <qresource prefix="animation">
+    <file>ajax-loader.gif</file>
+  </qresource>
+</RCC>

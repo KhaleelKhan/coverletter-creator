@@ -22,7 +22,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.setupUi(self)
 
 		self.mainTitle = "Coverletter Creator"
-		self.config = QSettings("KhaleelKhan", "Coverletter_Creator-dev")
+		self.config = QSettings("KhaleelKhan", "Coverletter_Creator")
 		self.settings = SettingsHandler(parent=self, settings=self.config)
 
 		self.clipboard = QtWidgets.QApplication.clipboard()

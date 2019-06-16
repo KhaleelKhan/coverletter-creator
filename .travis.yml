@@ -7,8 +7,7 @@ python:
 cache: pip
 env:
   - DISPLAY=:99.0
-services:
-  - xvfb
+services: xvfb
 before_install:
   - sudo apt-get install python-enchant
 install:

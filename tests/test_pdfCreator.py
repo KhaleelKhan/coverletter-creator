@@ -15,7 +15,7 @@ class TestPdfCreator(unittest.TestCase):
 		self.pdf_creator = PdfCreator(data=xml)
 
 		with open('Latex_template.tex', 'w')as f:
-			f.write('\\documentclass[11pt,a4paper]{article}\n\\begin{document}\n\\VAR{FIRSTNAME}\n\\end{document}')
+			f.write('\\documentclass[11pt,a4paper]{article}\n\\usepackage{fontspec}\n\\begin{document}\n\\VAR{FIRSTNAME}\n\\end{document}')
 
 	def tearDown(self):
 		os.remove('Latex_template.tex')
@@ -52,7 +52,7 @@ class TestPdfCreator(unittest.TestCase):
 		self.pdf_creator.convert_to_dict()
 		self.pdf_creator.render_template()
 		output_dir = os.path.abspath('./')
-		self.pdf_creator.compile_xelatex(compiler='pdflatex', pdfname='output.pdf', outputDir=output_dir, open_pdf=False)
+		self.pdf_creator.compile_xelatex(compiler='xelatex', pdfname='output.pdf', outputDir=output_dir, open_pdf=False)
 
 		with open('coverletter.tex', 'r') as f:
 			test_string = f.read()

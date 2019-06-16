@@ -62,7 +62,7 @@ class PdfCreator():
 		f.close()
 
 		if compiler in SettingsHandler.latex_compiler_list:
-			args = ['-interaction=nonstopmode', 'coverletter.tex']
+			args = ['-halt-on-error', '-interaction=nonstopmode', 'coverletter.tex']
 		else:
 			args = ['coverletter.tex']
 		progress_display = ProgressDisplay(parent=self.parent, executable=compiler, arguments=args)

@@ -5,10 +5,8 @@ python:
   - "3.7"
   - "3.7-dev"  # 3.7 development branch
 cache: pip
-env:
-  - DISPLAY=:99.0
 services: 
-  - xcb
+  - xvfb
 before_install:
   - sudo apt-get install python-enchant
 install:

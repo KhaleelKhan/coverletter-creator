@@ -27,7 +27,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 
 
 		if settings is None:
-			self.settings = QSettings("KhaleelKhan", "Coverletter_Creator-dev")
+			self.settings = QSettings("KhaleelKhan", "Coverletter_Creator")
 		else:
 			self.settings = settings
 

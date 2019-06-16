@@ -5,13 +5,11 @@ python:
   - "3.7"
   - "3.7-dev"  # 3.7 development branch
 cache: pip
-variables:
-    QT_QPA_PLATFORM: "offscreen"
-services:
-  - xvfb
+env:
+  - DISPLAY=:99.0
 before_install:
   - sudo apt-get install python-enchant
-  - sudo apt-get install -qq libegl1-mesa
+  - sh -e /etc/init.d/xvfb start
 install:
   - pip install -r requirements.txt
 script:

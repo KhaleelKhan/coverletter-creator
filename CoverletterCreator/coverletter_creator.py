@@ -300,7 +300,10 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
 	def generate_text(self):
 		textcreator = TextCreator(data=self.generate_root())
-		textcreator.read_template(template=self.settings.text_template)
+		try:
+			textcreator.read_template(template=self.settings.text_template)
+		except FileNotFoundError:
+			QtWidgets.QMessageBox.critical(self, "File not Found", "Cannot find template file %s." % self.settings.text_template)
 		textcreator.convert_to_dict()
 		textcreator.render_template()
 		filename = self.COMPANYSHORTNAME.text() + '_' + self.JOBREFID.text() + '_Coverletter'

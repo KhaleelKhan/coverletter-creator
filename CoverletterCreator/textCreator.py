@@ -11,7 +11,6 @@ class TextCreator():
 		self.lxml_data = data
 
 	def read_template(self, template):
-		# TODO: test if template file exists
 		with open(os.path.realpath(template), 'r') as f:
 			template_str = f.read()
 			self.template = jinja2.Template(template_str)
@@ -43,9 +42,3 @@ class TextCreator():
 			else:
 				os.startfile(os.path.join(outputDir, outputFile))
 
-
-
-if __name__ == "__main__":
-	textcreator = TextCreator()
-	textcreator.read_template()
-	textcreator.render_template()

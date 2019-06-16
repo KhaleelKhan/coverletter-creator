@@ -43,7 +43,7 @@ class ProgressDisplay(QtWidgets.QDialog, progress.Ui_ProgressDialog):
 
 def run():
 	app = QtWidgets.QApplication(sys.argv)
-	form = ProgressDisplay('ping',['127.0.0.1'])
+	form = ProgressDisplay('ping',['-c 3','127.0.0.1'])
 	form.show()
 	app.exec_()
 

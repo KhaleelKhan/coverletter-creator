@@ -6,7 +6,7 @@ python:
   - "3.7"
   - "3.7-dev"  # 3.7 development branch
 env:
-  - QT_QPA_PLATFORM=offscreen
+  - QT_QPA_PLATFORM=minimal
 cache: pip
 services: 
   - xvfb

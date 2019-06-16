@@ -5,6 +5,8 @@ python:
   - "3.7"
   - "3.7-dev"  # 3.7 development branch
 cache: pip
+variables:
+    QT_QPA_PLATFORM: "offscreen"
 services:
   - xvfb
 before_install:

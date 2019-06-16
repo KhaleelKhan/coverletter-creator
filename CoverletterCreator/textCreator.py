@@ -42,9 +42,3 @@ class TextCreator():
 			else:
 				os.startfile(os.path.join(outputDir, outputFile))
 
-
-
-if __name__ == "__main__":
-	textcreator = TextCreator()
-	textcreator.read_template()
-	textcreator.render_template()

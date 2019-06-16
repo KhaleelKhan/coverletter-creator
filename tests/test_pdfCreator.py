@@ -2,6 +2,11 @@ import unittest
 from CoverletterCreator.pdfCreator import PdfCreator
 from lxml.etree import XML
 import jinja2
+import sys, os
+
+from PyQt5.QtWidgets import QApplication
+
+app = QApplication(sys.argv)
 
 
 class TestPdfCreator(unittest.TestCase):
@@ -10,10 +15,9 @@ class TestPdfCreator(unittest.TestCase):
 		self.pdf_creator = PdfCreator(data=xml)
 
 		with open('Latex_template.tex', 'w')as f:
-			f.write(r'\VAR{FIRSTNAME}')
+			f.write('\\documentclass[11pt,a4paper]{article}\n\\usepackage{fontspec}\n\\begin{document}\n\\VAR{FIRSTNAME}\n\\end{document}')
 
 	def tearDown(self):
-		import os
 		os.remove('Latex_template.tex')
 
 	def test_read_template(self):
@@ -39,15 +43,24 @@ class TestPdfCreator(unittest.TestCase):
 		self.pdf_creator.read_template(template=pdf_template)
 		self.pdf_creator.convert_to_dict()
 		self.pdf_creator.render_template()
-		self.assertTrue(self.pdf_creator.renderer_template == 'Max')
+		self.assertTrue('Max' in self.pdf_creator.renderer_template)
+		self.assertTrue('\\VAR{' not in self.pdf_creator.renderer_template)
 
-	# Commented till Qt testing can be implemented
-	# def test_compile_xelatex(self):
-	# 	pdf_template = 'Latex_template.tex'
-	# 	self.pdf_creator.read_template(template=pdf_template)
-	# 	self.pdf_creator.convert_to_dict()
-	# 	self.pdf_creator.render_template()
-	# 	self.pdf_creator.compile_xelatex(compiler='xelatex', pdfname='output.pdf', outputDir='./', open_pdf=False)
+	def test_compile_xelatex(self):
+		pdf_template = 'Latex_template.tex'
+		self.pdf_creator.read_template(template=pdf_template)
+		self.pdf_creator.convert_to_dict()
+		self.pdf_creator.render_template()
+		output_dir = os.path.abspath('./')
+		self.pdf_creator.compile_xelatex(compiler='xelatex', pdfname='output.pdf', outputDir=output_dir, open_pdf=False)
+
+		with open('coverletter.tex', 'r') as f:
+			test_string = f.read()
+		self.assertTrue('Max' in test_string)
+		self.assertTrue(os.path.exists('output.pdf'))
+
+		os.remove('output.pdf')
+		os.remove('coverletter.tex')
 
 if __name__ == '__main__':
 	unittest.main()

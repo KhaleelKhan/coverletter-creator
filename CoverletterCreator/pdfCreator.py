@@ -74,10 +74,10 @@ class PdfCreator():
 			shutil.copy(pdfname, outputDir)
 			if keep_tex:
 				shutil.copy('coverletter.tex', outputDir)
-			shutil.rmtree(temp)
-			os.chdir(current)
 		except FileNotFoundError:
 			raise FileNotFoundError
+		shutil.rmtree(temp)
+		os.chdir(current)
 
 		if open_pdf:
 			if sys.platform.startswith('linux'):

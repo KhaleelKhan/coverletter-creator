@@ -61,6 +61,13 @@ class ProgressDisplay(QtWidgets.QDialog, progress.Ui_ProgressDialog):
 		self.progress_bar.movie().stop()
 		self.close()
 
+	def __del__(self):
+		# If QApplication is closed attempt to kill the process
+		self.process.terminate()
+		# Wait for Xms and then elevate the situation to terminate
+		if not self.process.waitForFinished(10000):
+			self.process.kill()
+
 
 def run():
 	app = QtWidgets.QApplication(sys.argv)

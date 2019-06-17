@@ -39,7 +39,7 @@ class Ui_ProgressDialog(object):
         self.verticalLayout.addWidget(self.buttonBox)
 
         self.retranslateUi(ProgressDialog)
-        self.buttonBox.accepted.connect(ProgressDialog.close)
+        self.buttonBox.accepted.connect(ProgressDialog.deleteLater)
         QtCore.QMetaObject.connectSlotsByName(ProgressDialog)
 
     def retranslateUi(self, ProgressDialog):

@@ -1,6 +1,9 @@
 [![Build Status](https://travis-ci.com/KhaleelKhan/coverletter-creator.svg?branch=master)](https://travis-ci.com/KhaleelKhan/coverletter-creator) [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.svg?v=103)](https://github.com/KhaleelKhan/coverletter-creator/blob/master/COPYING)
 
+TODO
+----
 
+Implement more tests, improve test coverage: [![Coverage Status](https://coveralls.io/repos/github/KhaleelKhan/coverletter-creator/badge.svg?branch=master)](https://coveralls.io/github/KhaleelKhan/coverletter-creator?branch=master)
 Requirements
 ============
 

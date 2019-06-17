@@ -64,8 +64,9 @@ class PdfCreator:
 		for element in self.lxml_data.iter():
 			if element.text is not None:
 				temp_dict[str(element.tag)] = str(element.text).replace('\n', r'\\')
+				if str(element.tag) == 'PHOTOPATH':
+					temp_dict['PHOTOPATH'] = os.path.abspath(temp_dict['PHOTOPATH'])
 		self.render_dict = temp_dict
-		self.render_dict['PHOTOPATH'] = os.path.abspath(self.render_dict['PHOTOPATH'])
 
 	def compile_xelatex(self, compiler, pdfname, outputDir, open_pdf=True, keep_tex=True):
 		"""

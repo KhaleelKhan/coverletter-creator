@@ -3,8 +3,8 @@ import sys
 
 import jinja2
 
-from CoverletterCreator.SettingsHandler import SettingsHandler
 from CoverletterCreator.ProgressDisplay import ProgressDisplay
+from CoverletterCreator.SettingsHandler import SettingsHandler
 
 latex_jinja_env = jinja2.Environment(
 	block_start_string='\BLOCK{',
@@ -21,20 +21,45 @@ latex_jinja_env = jinja2.Environment(
 )
 
 
-class PdfCreator():
+class PdfCreator:
+	"""
+	This class handles latex rendering and generating pdf.
+
+	"""
 	def __init__(self, data, parent=None):
+		"""
+		Initialise PdfCreator
+
+		:param data: lxml root data
+		:type data: lxml.etree
+		:param parent: Optional parent for gui creation.
+		:type parent: QtWidgets.QMainWindow
+		"""
 		super(PdfCreator, self).__init__()
 		self.lxml_data = data
 		self.parent = parent
 
 	def read_template(self, template):
-		# TODO: test if template file exists
+		"""
+		Generates jinja2 template from text file.
+
+		:param template: Path to template file
+		:type template: str
+		"""
 		self.template = latex_jinja_env.get_template(os.path.realpath(template))
 
 	def render_template(self):
+		"""
+		Render template using jinja renderer.
+
+		"""
 		self.renderer_template = self.template.render(self.render_dict)
 
 	def convert_to_dict(self):
+		"""
+		Convert xml data to dict, dict is used while rendering wih jinja.
+
+		"""
 		temp_dict = {}
 		for element in self.lxml_data.iter():
 			if element.text is not None:
@@ -43,7 +68,20 @@ class PdfCreator():
 
 	def compile_xelatex(self, compiler, pdfname, outputDir, photo=None, open_pdf=True, keep_tex=True):
 		"""
-		Genertates the pdf from string
+		Generates the pdf from string.
+
+		:param compiler: Which latex compiler to use.
+		:type compiler: str
+		:param pdfname: Name of the output file.
+		:type pdfname: str
+		:param outputDir: Output Directory.
+		:type outputDir: str
+		:param photo: Optional photo path.
+		:type photo: str
+		:param open_pdf: Open text file after saving?
+		:type open_pdf: Bool
+		:param keep_tex: Keep .tex file after pdf compilation?
+		:type keep_tex: Bool
 		"""
 
 		import subprocess
@@ -64,9 +102,12 @@ class PdfCreator():
 		if compiler in SettingsHandler.latex_compiler_list:
 			args = ['-halt-on-error', '-interaction=nonstopmode', 'coverletter.tex']
 		else:
-			args = ['coverletter.tex']
+			args = ['-halt-on-error', 'coverletter.tex']
+
+		# Start a dialog window which handles log display and execution.
 		progress_display = ProgressDisplay(parent=self.parent, executable=compiler, arguments=args)
-		progress_display.exec_()
+		progress_display.exec_()  # This blocks the other windows, which is expected. self closing.
+		# Reshow dialog window but in non-blocking mode
 		progress_display.show()
 
 		try:

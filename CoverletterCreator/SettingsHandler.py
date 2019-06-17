@@ -1,6 +1,6 @@
 import os
 
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QFileDialog
 
@@ -9,7 +9,9 @@ from CoverletterCreator.ui import settings
 
 class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 	"""
-	This class handles all the settings related to the project such as latex teplate file, output folders etc
+	This class handles all the settings related to the project such as latex template file,
+	output folders etc
+
 	"""
 
 	latex_compiler_list = ["xelatex", "pdfLatex"]
@@ -17,8 +19,9 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 	def __init__(self, parent=None, settings=None):
 		"""
 		Initialize the settings class.
-		:param parent: QApplication parent that is passed when setting up GUI.
-		:type parent: QGUI.QApplication
+
+		:param parent: Optional QApplication parent that is passed when setting up GUI.
+		:type parent: QtWidgets.QMainWindow
 		:param settings: Qsettings object that handles save and restore config.
 		:type settings:  Qsettings
 		"""
@@ -64,6 +67,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 	def handleButtonClick(self, button, buttonbox):
 		"""
 		Called on buttonbox click event.
+
 		:param button: Button clicked on.
 		:type button: QtWidgets.QAbstractButton
 		:param buttonbox: Buttonbox object that was clicked.
@@ -83,6 +87,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 	def verify_path_field(self, path, icon_label):
 		"""
 		Check if paths in lineEdits are valid, if valid then change corresponding icon to "okay" or "notokay".
+
 		:param path: Path that was entered in lineEdit (directly or with Browse button).
 		:type path: str
 		:param icon_label: Icon corresponding to current LineEdit.
@@ -106,6 +111,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 		"""
 		Called on change event of compiler select comboBox, enable/disable custom latex command LineEdit dependeing on
 		what is selected.
+
 		:param compiler: Text selected in comboBox
 		:type compiler: str
 		"""
@@ -117,6 +123,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 	def reset_fields(self):
 		"""
 		Clear all fields and hide window, called on cancel clicked.
+
 		"""
 		self.le_latex_tempate.setText(self.latex_template)
 		self.le_text_template.setText(self.text_template)
@@ -136,6 +143,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 	def save_fields(self):
 		"""
 		Save all fields to their variables.
+
 		"""
 		self.latex_template = self.le_latex_tempate.text()
 		self.text_template = self.le_text_template.text()
@@ -150,6 +158,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 	def write_settings_to_config(self):
 		"""
 		Write variables to config using Qsettings object.
+
 		"""
 		self.settings.beginGroup("Templates")
 		self.settings.setValue("latex", str(self.latex_template))
@@ -175,6 +184,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 	def read_settings_from_config(self):
 		"""
 		Read settings from config into variables.
+
 		"""
 		self.settings.beginGroup("Templates")
 		self.latex_template = str(self.settings.value("latex", self.latex_template))
@@ -199,7 +209,8 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 
 	def get_latex_compiler(self):
 		"""
-		Convinience function to easily fing compiler set, can be predefined or custom.
+		Convenience function to easily fing compiler set, can be predefined or custom.
+
 		:return: latex command
 		:rtype: str
 		"""
@@ -211,6 +222,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 	def open_latex_template(self):
 		"""
 		Open file dialog to browse latex template.
+
 		"""
 		latex_template, _ = QFileDialog.getOpenFileName(self, "Open latex template", "./", "Latex Files (*.tex)")
 		if latex_template:
@@ -219,6 +231,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 	def open_latex_dir(self):
 		"""
 		Open file dialog to browse latex output directory.
+
 		"""
 		latex_dir = QFileDialog.getExistingDirectory(self, 'Latex output directory', './')
 		if latex_dir:
@@ -227,6 +240,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 	def open_text_template(self):
 		"""
 		Open file dialog to browse text template.
+
 		"""
 		template, _ = QFileDialog.getOpenFileName(self, "Open text template", "./", "Text Files (*.txt)")
 		if template:
@@ -235,6 +249,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 	def open_text_dir(self):
 		"""
 		Open file dialog to browse text output directory.
+
 		"""
 		text_dir = QFileDialog.getExistingDirectory(self, 'Text output directory', './')
 		if text_dir:

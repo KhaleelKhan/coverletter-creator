@@ -1,7 +1,9 @@
 import unittest
-from CoverletterCreator.textCreator import TextCreator
-from lxml.etree import XML
+
 import jinja2
+from lxml.etree import XML
+
+from CoverletterCreator.textCreator import TextCreator
 
 
 class TestTextCreator(unittest.TestCase):
@@ -39,7 +41,7 @@ class TestTextCreator(unittest.TestCase):
 		self.text_creator.read_template(template=text_template)
 		self.text_creator.convert_to_dict()
 		self.text_creator.render_template()
-		self.assertTrue(self.text_creator.renderer_template == 'Max')
+		self.assertTrue(self.text_creator.rendered_template == 'Max')
 
 	def test_compile_text(self):
 		text_template = 'Text_template.txt'

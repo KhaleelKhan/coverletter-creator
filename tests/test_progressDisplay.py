@@ -7,10 +7,11 @@ from PyQt5.QtTest import QTest
 
 from CoverletterCreator.ProgressDisplay import ProgressDisplay
 
+app = QtWidgets.QApplication(sys.argv)
+
 
 class TestProgressDisplay(TestCase):
 	def setUp(self):
-		self.app = QtWidgets.QApplication(sys.argv)
 		self.progress_display = ProgressDisplay('ping', ['-c 3', '127.0.0.1'])
 
 	def test_show_dialog(self):

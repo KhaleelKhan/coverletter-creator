@@ -32,6 +32,7 @@ class Ui_ProgressDialog(object):
         self.log_display.setObjectName("log_display")
         self.verticalLayout.addWidget(self.log_display)
         self.buttonBox = QtWidgets.QDialogButtonBox(ProgressDialog)
+        self.buttonBox.setEnabled(False)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")

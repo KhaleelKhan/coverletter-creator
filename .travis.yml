@@ -14,5 +14,9 @@ before_install:
   - sudo apt-get install texlive
 install:
   - pip install -r requirements.txt
+  - pip install coverage
+  - pip install coveralls
 script:
-  - python -m unittest -vvv
+  - coverage run -m unittest discover
+after_success:
+  coveralls

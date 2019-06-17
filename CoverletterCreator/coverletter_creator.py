@@ -292,18 +292,18 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.pb_generatePdf.setEnabled(False)
 		try:
 			pdfcreator.compile_xelatex(compiler=self.settings.get_latex_compiler(), pdfname=filename+".pdf",
-									outputDir=self.settings.latex_dir, photo=self.PHOTOPATH.text(),
+									outputDir=self.settings.latex_dir,
 									open_pdf=self.settings.open_pdf, keep_tex=self.settings.keep_tex)
-		except FileNotFoundError:
-			QtWidgets.QMessageBox.critical(self, "PDF Compilation Failed", "Cannot complete command %s." % self.settings.get_latex_compiler())
+		except FileNotFoundError as e:
+			QtWidgets.QMessageBox.critical(self, "PDF Compilation Failed", "Cannot complete command %s." + str(e) % self.settings.get_latex_compiler())
 		self.pb_generatePdf.setEnabled(True)
 
 	def generate_text(self):
 		textcreator = TextCreator(data=self.generate_root())
 		try:
 			textcreator.read_template(template=self.settings.text_template)
-		except FileNotFoundError:
-			QtWidgets.QMessageBox.critical(self, "File not Found", "Cannot find template file %s." % self.settings.text_template)
+		except FileNotFoundError as e:
+			QtWidgets.QMessageBox.critical(self, "Error", "Cannot find template file %s.\n" + str(e) % self.settings.text_template)
 		textcreator.convert_to_dict()
 		textcreator.render_template()
 		filename = self.COMPANYSHORTNAME.text() + '_' + self.JOBREFID.text() + '_Coverletter'

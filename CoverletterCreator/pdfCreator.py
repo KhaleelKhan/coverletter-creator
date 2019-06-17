@@ -65,8 +65,9 @@ class PdfCreator:
 			if element.text is not None:
 				temp_dict[str(element.tag)] = str(element.text).replace('\n', r'\\')
 		self.render_dict = temp_dict
+		self.render_dict['PHOTOPATH'] = os.path.abspath(self.render_dict['PHOTOPATH'])
 
-	def compile_xelatex(self, compiler, pdfname, outputDir, photo=None, open_pdf=True, keep_tex=True):
+	def compile_xelatex(self, compiler, pdfname, outputDir, open_pdf=True, keep_tex=True):
 		"""
 		Generates the pdf from string.
 
@@ -91,8 +92,6 @@ class PdfCreator:
 
 		current = os.getcwd()
 		temp = tempfile.mkdtemp()
-		if photo is not None:
-			shutil.copy(photo, temp)
 		os.chdir(temp)
 
 		f = open('coverletter.tex', 'w')
@@ -100,7 +99,7 @@ class PdfCreator:
 		f.close()
 
 		if compiler in SettingsHandler.latex_compiler_list:
-			args = ['-halt-on-error', '-interaction=nonstopmode', 'coverletter.tex']
+			args = ['-interaction=nonstopmode', 'coverletter.tex']
 		else:
 			args = ['-halt-on-error', 'coverletter.tex']
 

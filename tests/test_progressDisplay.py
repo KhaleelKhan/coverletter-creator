@@ -12,7 +12,7 @@ app = QtWidgets.QApplication(sys.argv)
 
 class TestProgressDisplay(TestCase):
 	def setUp(self):
-		self.progress_display = ProgressDisplay('ping', ['-c 3', '127.0.0.1'])
+		self.progress_display = ProgressDisplay('python', ['-h'])
 
 	def test_show_dialog(self):
 		self.progress_display.show()

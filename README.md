@@ -3,7 +3,8 @@
 TODO
 ----
 
-Implement more tests, improve test coverage: [![Coverage Status](https://coveralls.io/repos/github/KhaleelKhan/coverletter-creator/badge.svg?branch=master)](https://coveralls.io/github/KhaleelKhan/coverletter-creator?branch=master)
+* Implement more tests, improve test coverage: [![Coverage Status](https://coveralls.io/repos/github/KhaleelKhan/coverletter-creator/badge.svg?branch=master)](https://coveralls.io/github/KhaleelKhan/coverletter-creator?branch=master)
+
 Requirements
 ============
 

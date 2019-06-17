@@ -26,6 +26,9 @@ class ProgressDisplay(QtWidgets.QDialog, progress.Ui_ProgressDialog):
 		self.progress_bar.setMovie(movie)
 		movie.start()
 
+		self.executable = executable
+		self.arguments = arguments
+
 		# QProcess object for external app
 		self.process = QtCore.QProcess(self)
 		# QProcess emits `readyRead` when there is data to be read
@@ -35,7 +38,7 @@ class ProgressDisplay(QtWidgets.QDialog, progress.Ui_ProgressDialog):
 		self.process.started.connect(lambda: self.buttonBox.setEnabled(False))
 		self.process.finished.connect(self.processFinished)
 
-		self.process.start(executable, arguments)
+		self.process.start(self.executable, self.arguments)
 
 	def dataReady(self):
 		"""
@@ -62,8 +65,8 @@ class ProgressDisplay(QtWidgets.QDialog, progress.Ui_ProgressDialog):
 def run():
 	app = QtWidgets.QApplication(sys.argv)
 	form = ProgressDisplay('ping',['-c 3','127.0.0.1'])
-	form.show()
-	app.exec_()
+	form.exec_()
+	#app.exec_()
 
 
 if __name__ == "__main__":

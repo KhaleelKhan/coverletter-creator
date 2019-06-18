@@ -14,7 +14,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 
 	"""
 
-	latex_compiler_list = ["xelatex", "pdfLatex"]
+	latex_compiler_list = ["xelatex", "pdflatex"]
 
 	def __init__(self, parent=None, settings=None):
 		"""
@@ -28,9 +28,9 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 		super(SettingsHandler, self).__init__(parent)
 		self.setupUi(self)
 
-		self.latex_template = 'Latex/Templates/Awesome-CV/Latex_template.tex'
+		self.latex_template = os.path.abspath('Latex/Templates/Awesome-CV/Latex_template.tex')
 		self.latex_dir = os.path.abspath('Latex/Output')
-		self.text_template = 'Text/Templates/Simple/Text_template.txt'
+		self.text_template = os.path.abspath('Text/Templates/Simple/Text_template.txt')
 		self.text_dir = os.path.abspath('Text/Output')
 		self.open_pdf = True
 		self.open_text = True
@@ -171,9 +171,9 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 		self.settings.endGroup()
 
 		self.settings.beginGroup("Misc")
-		self.settings.setValue("open_pdf", self.open_pdf)
-		self.settings.setValue("open_text", self.open_text)
-		self.settings.setValue("keep_tex", self.keep_tex)
+		self.settings.setValue("open_pdf", str(self.open_pdf))
+		self.settings.setValue("open_text", str(self.open_text))
+		self.settings.setValue("keep_tex", str(self.keep_tex))
 		self.settings.setValue("latex_compiler", self.latex_compiler)
 		self.settings.setValue("latex_custom_command", self.latex_custom_command)
 		self.settings.endGroup()
@@ -197,9 +197,9 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 		self.settings.endGroup()
 
 		self.settings.beginGroup("Misc")
-		self.open_pdf = self.settings.value("open_pdf", self.open_pdf) == 'true'
-		self.open_text = self.settings.value("open_text", self.open_text) == 'true'
-		self.keep_tex = self.settings.value("keep_tex", self.keep_tex) == 'true'
+		self.open_pdf = self.settings.value("open_pdf", str(self.open_pdf)) == 'True'
+		self.open_text = self.settings.value("open_text", str(self.open_text)) == 'True'
+		self.keep_tex = self.settings.value("keep_tex", str(self.keep_tex)) == 'True'
 		self.latex_compiler = str(self.settings.value("latex_compiler", self.latex_compiler))
 		self.latex_custom_command = str(self.settings.value("latex_custom_command", self.latex_custom_command))
 		self.settings.endGroup()

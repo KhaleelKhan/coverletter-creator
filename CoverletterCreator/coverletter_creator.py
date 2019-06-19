@@ -22,7 +22,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.setupUi(self)
 
 		self.mainTitle = "Coverletter Creator"
-		self.config = QSettings("KhaleelKhan", "Coverletter_Creator")
+		self.config = QSettings()
 		self.settings = SettingsHandler(parent=self, settings=self.config)
 
 		self.clipboard = QtWidgets.QApplication.clipboard()
@@ -69,7 +69,6 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		for child in self.centralwidget.findChildren(SpellTextEdit):
 			child.textChanged.connect(self.setWindowTitleUnsaved)
 		for child in self.centralwidget.findChildren(QtWidgets.QComboBox):
-			#self.cb_recipientSalutation.currentIndexChanged()
 			child.currentIndexChanged.connect(self.setWindowTitleUnsaved)
 
 	def connect_mandatory_fields(self):

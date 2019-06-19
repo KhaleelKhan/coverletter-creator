@@ -226,7 +226,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 		"""
 		latex_template, _ = QFileDialog.getOpenFileName(self, "Open latex template", "./", "Latex Files (*.tex)")
 		if latex_template:
-			self.le_latex_tempate.setText(latex_template)
+			self.le_latex_tempate.setText(os.path.abspath(latex_template))
 
 	def open_latex_dir(self):
 		"""
@@ -244,7 +244,7 @@ class SettingsHandler(QtWidgets.QMainWindow, settings.Ui_SettingsWindow):
 		"""
 		template, _ = QFileDialog.getOpenFileName(self, "Open text template", "./", "Text Files (*.txt)")
 		if template:
-			self.le_text_template.setText(template)
+			self.le_text_template.setText(os.path.abspath(template))
 
 	def open_text_dir(self):
 		"""

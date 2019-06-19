@@ -1,10 +1,10 @@
 import os
 import sys
 from unittest import TestCase
+from unittest import mock
 
 from PyQt5.QtCore import QSettings
 from PyQt5.QtTest import QTest
-from PyQt5.QtWidgets import QDialogButtonBox
 
 from CoverletterCreator.SettingsHandler import SettingsHandler
 from PyQt5 import QtWidgets, QtCore
@@ -329,6 +329,86 @@ class TestSettingsHandler(TestCase):
 		self.assertTrue(self.form.cb_keep_tex.isChecked())
 		self.assertEqual(self.form.combo_latex_compiler.currentText(), 'xelatex')
 		self.assertEqual(self.form.le_custom_latex.text(), '')
+
+
+	@mock.patch('CoverletterCreator.SettingsHandler.os.path')
+	def test_verify_path_field(self, mock_path):
+		mock_path.exists.return_value = True
+
+		self.form.verify_path_field('test_path_true', self.form.icon_latex_template)
+		mock_path.exists.assert_called_with('test_path_true')
+
+		self.assertTrue(self.form.latex_buttonBox.button(QtWidgets.QDialogButtonBox.Ok).isEnabled())
+		self.assertTrue(self.form.text_buttonBox.button(QtWidgets.QDialogButtonBox.Ok).isEnabled())
+		self.assertTrue(self.form.latex_buttonBox.button(QtWidgets.QDialogButtonBox.Apply).isEnabled())
+		self.assertTrue(self.form.text_buttonBox.button(QtWidgets.QDialogButtonBox.Apply).isEnabled())
+
+		mock_path.exists.return_value = False
+
+		self.form.verify_path_field('test_path_false', self.form.icon_latex_template)
+		mock_path.exists.assert_called_with('test_path_false')
+
+		self.assertFalse(self.form.latex_buttonBox.button(QtWidgets.QDialogButtonBox.Ok).isEnabled())
+		self.assertFalse(self.form.text_buttonBox.button(QtWidgets.QDialogButtonBox.Ok).isEnabled())
+		self.assertFalse(self.form.latex_buttonBox.button(QtWidgets.QDialogButtonBox.Apply).isEnabled())
+		self.assertFalse(self.form.text_buttonBox.button(QtWidgets.QDialogButtonBox.Apply).isEnabled())
+
+	@mock.patch('CoverletterCreator.SettingsHandler.QFileDialog', autospec=True)
+	def test_open_latex_template(self, mock_opendialog):
+		mock_opendialog.getOpenFileName.return_value = 'test_open_latex_template_filename', 'filetype'
+		self.form.open_latex_template()
+		self.assertTrue(mock_opendialog.getOpenFileName.called)
+		self.assertEqual(os.path.abspath('test_open_latex_template_filename'), self.form.le_latex_tempate.text())
+
+		# Simulate open dialog closed (canceled)
+		mock_opendialog.getOpenFileName.return_value = '', ''
+		self.form.open_latex_template()
+		self.assertTrue(mock_opendialog.getOpenFileName.called)
+		# no change
+		self.assertEqual(os.path.abspath('test_open_latex_template_filename'), self.form.le_latex_tempate.text())
+
+	@mock.patch('CoverletterCreator.SettingsHandler.QFileDialog', autospec=True)
+	def test_open_latex_dir(self, mock_opendialog):
+		mock_opendialog.getExistingDirectory.return_value = 'test_open_latex_dir_folder'
+		self.form.open_latex_dir()
+		self.assertTrue(mock_opendialog.getExistingDirectory.called)
+		self.assertEqual(os.path.abspath('test_open_latex_dir_folder'), self.form.le_latex_out_dir.text())
+
+		# Simulate open dialog closed (canceled)
+		mock_opendialog.getExistingDirectory.return_value = ''
+		self.form.open_latex_dir()
+		self.assertTrue(mock_opendialog.getExistingDirectory.called)
+		# no change
+		self.assertEqual(os.path.abspath('test_open_latex_dir_folder'), self.form.le_latex_out_dir.text())
+
+	@mock.patch('CoverletterCreator.SettingsHandler.QFileDialog', autospec=True)
+	def test_open_text_template(self, mock_opendialog):
+		mock_opendialog.getOpenFileName.return_value = 'test_open_text_template_filename', 'filetype'
+		self.form.open_text_template()
+		self.assertTrue(mock_opendialog.getOpenFileName.called)
+		self.assertEqual(os.path.abspath('test_open_text_template_filename'), self.form.le_text_template.text())
+
+		# Simulate open dialog closed (canceled)
+		mock_opendialog.getOpenFileName.return_value = '', ''
+		self.form.open_text_template()
+		self.assertTrue(mock_opendialog.getOpenFileName.called)
+		# no change
+		self.assertEqual(os.path.abspath('test_open_text_template_filename'), self.form.le_text_template.text())
+
+	@mock.patch('CoverletterCreator.SettingsHandler.QFileDialog', autospec=True)
+	def test_open_text_dir(self, mock_opendialog):
+		mock_opendialog.getExistingDirectory.return_value = 'test_open_text_dir_folder'
+		self.form.open_text_dir()
+		self.assertTrue(mock_opendialog.getExistingDirectory.called)
+		self.assertEqual(os.path.abspath('test_open_text_dir_folder'), self.form.le_text_out_dir.text())
+
+		# Simulate open dialog closed (canceled)
+		mock_opendialog.getExistingDirectory.return_value = ''
+		self.form.open_text_dir()
+		self.assertTrue(mock_opendialog.getExistingDirectory.called)
+		# no change
+		self.assertEqual(os.path.abspath('test_open_text_dir_folder'), self.form.le_text_out_dir.text())
+
 
 	def reset_all_variables(self):
 		# Reset all variables

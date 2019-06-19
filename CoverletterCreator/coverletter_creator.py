@@ -305,7 +305,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 									outputDir=self.settings.latex_dir,
 									open_pdf=self.settings.open_pdf, keep_tex=self.settings.keep_tex)
 		except FileNotFoundError as e:
-			QtWidgets.QMessageBox.critical(self, "PDF Compilation Failed", "Cannot complete command %s." + str(e) % self.settings.get_latex_compiler())
+			QtWidgets.QMessageBox.critical(self, "PDF Compilation Failed: " + str(e), "Cannot complete command {}.".format(self.settings.get_latex_compiler()))
 		self.pb_generatePdf.setEnabled(True)
 
 	def generate_text(self):
@@ -313,7 +313,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		try:
 			textcreator.read_template(template=self.settings.text_template)
 		except FileNotFoundError as e:
-			QtWidgets.QMessageBox.critical(self, "Error", "Cannot find template file %s.\n" + str(e) % self.settings.text_template)
+			QtWidgets.QMessageBox.critical(self, "Error: " + repr(e) , "Cannot find template file {}.\n".format(self.settings.text_template))
 		textcreator.convert_to_dict()
 		textcreator.render_template()
 		filename = self.COMPANYSHORTNAME.text() + '_' + self.JOBREFID.text() + '_Coverletter'
@@ -347,7 +347,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
 	# event : QCloseEvent
 	def closeEvent(self, event):
-		if self.file_dirty :
+		if self.file_dirty:
 			choice = QtWidgets.QMessageBox.question(self, 'Project not saved',
 												"Save Project before exit?",
 												QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Cancel)

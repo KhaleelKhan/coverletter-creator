@@ -230,7 +230,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		try:
 			with open(filename, 'r') as f:
 				self.root = XML(f.read())#.replace("\n", ""))
-
+			self.reset_all_fields()
 			for element in self.root.iter():
 				widget = self.findChild(QtWidgets.QLineEdit, str(element.tag))
 				if widget is not None and element.text is not None:
@@ -355,13 +355,13 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 				self.save_project()
 				self.writeSettings()
 				event.accept()
-				sys.exit()
+				#sys.exit()
 			elif choice == QtWidgets.QMessageBox.Cancel:
 				event.ignore()
 			else:
 				self.writeSettings()
 				event.accept()
-				sys.exit()
+				#sys.exit()
 		else:
 			self.writeSettings()
 			event.accept()

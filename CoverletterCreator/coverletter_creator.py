@@ -53,9 +53,9 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		for child in self.centralwidget.findChildren(QtWidgets.QLabel):
 			child.mousePressEvent = functools.partial(self.label_clicked, source=child)
 		for child in self.centralwidget.findChildren(QtWidgets.QCheckBox):
-			child.mousePressEvent = functools.partial(self.label_clicked, source=child)
-		# self.RECEIPIENTGENDER.mousePressEvent = functools.partial(self.label_clicked, source=self.RECEIPIENTGENDER)
-		# self.RECEIPIENTSALUTATION.mousePressEvent = functools.partial(self.label_clicked, source=self.RECEIPIENTSALUTATION)
+			child.mousePressEvent = functools.partial(self.checkbox_clicked, source=child)
+		self.RECEIPIENTGENDER.mousePressEvent = functools.partial(self.combobox_clicked, source=self.RECEIPIENTGENDER)
+		self.RECEIPIENTSALUTATION.mousePressEvent = functools.partial(self.combobox_clicked, source=self.RECEIPIENTSALUTATION)
 
 		self.COMPANYNAME.editingFinished.connect(lambda: self.COMPANYSHORTNAME.setText(self.COMPANYNAME.text()))
 
@@ -83,6 +83,17 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 	def label_clicked(self, event, source):
 		var_code = source.accessibleName()
 		self.clipboard.setText(str(var_code))
+		event.accept()
+
+	def checkbox_clicked(self, event, source):
+		var_code = source.accessibleName()
+		self.clipboard.setText(str(var_code))
+		source.toggle()
+
+	def combobox_clicked(self, event, source):
+		var_code = source.accessibleName()
+		self.clipboard.setText(str(var_code))
+		source.showPopup()
 
 	def setWindowTitleUnsaved(self):
 		self.file_dirty = True

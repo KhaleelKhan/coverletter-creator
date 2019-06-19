@@ -69,13 +69,5 @@ class ProgressDisplay(QtWidgets.QDialog, progress.Ui_ProgressDialog):
 			self.process.kill()
 
 
-def run():
-	app = QtWidgets.QApplication(sys.argv)
-	form = ProgressDisplay('ping',['-c 3','127.0.0.1'])
-	form.exec_()
-	#app.exec_()
-
-
 if __name__ == "__main__":
-	import sys
-	run()
+	pass

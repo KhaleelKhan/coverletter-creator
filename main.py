@@ -3,9 +3,13 @@
 if __name__ == '__main__':
 
 	import sys
-	from CoverletterCreator import coverletter_creator
-	from PyQt5 import QtCore
+	from CoverletterCreator.coverletter_creator import CoverletterCreator
+	from PyQt5 import QtWidgets
 
-	QtCore.QCoreApplication.setOrganizationName("KhaleelKhan")
-	QtCore.QCoreApplication.setApplicationName("Coverletter_Creator-dev")
-	sys.exit(coverletter_creator.run())
+	app = QtWidgets.QApplication(sys.argv)
+	app.setOrganizationName("KhaleelKhan")
+	app.setApplicationName("Coverletter_Creator-dev")
+	form = CoverletterCreator()
+	form.show()
+	app.exec_()
+	sys.exit()

@@ -365,7 +365,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		else:
 			self.writeSettings()
 			event.accept()
-			sys.exit()
+#			sys.exit()
 
 
 def run():

@@ -4,10 +4,10 @@ import functools
 import os
 import sys
 
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QSettings
 from PyQt5.QtWidgets import QFileDialog
-from lxml.etree import Element, tostring, XML, XMLSyntaxError
+from lxml.etree import Element, XML, XMLSyntaxError, tostring
 
 from CoverletterCreator.SettingsHandler import SettingsHandler
 from CoverletterCreator.SpellTextEdit import SpellTextEdit
@@ -36,7 +36,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
 
 		# Set default values
-		self.filename = "untitled.xml"
+		self.filename = "Examples/example_project.xml"
 		self.file_dirty = False
 
 		self.readSettings()
@@ -205,7 +205,6 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
 		return root
 
-
 	def saveas_project(self):
 		filename, _ = QFileDialog.getSaveFileName(self, "Save Project As","./","XML Files (*.xml)")
 
@@ -263,23 +262,19 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			self.setWindowTitleSaved()
 
 		except FileNotFoundError:
+			# Warning: File not found!
+			self.filename = "untitled.xml"
 			self.setWindowTitleUnsaved()
 			self.file_dirty = False
-			print("Warning: File not found!")
 
 		except XMLSyntaxError:
 			QtWidgets.QMessageBox.critical(self, "XML Read Failed",
 										   "Cannot read xml file %s. \n\nMake sure the xml file is not blank " % filename)
 
-
 	def browse_photo(self):
 		fname, _ = QFileDialog.getOpenFileName(self, 'Open profile photo',
 											   './', "Image files (*.jpg *.png)")
 		if fname:
-			image = QtGui.QImage(fname)
-			if image.isNull():
-				QtWidgets.QMessageBox.information(self, "Image Viewer", "Cannot load %s." % fname)
-				return
 			self.get_photo(fname)
 
 	def get_photo(self, fname):

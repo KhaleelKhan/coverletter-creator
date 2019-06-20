@@ -1,7 +1,7 @@
 import sys
-from unittest import TestCase
-from unittest import mock
-from PyQt5 import QtWidgets, QtCore
+from unittest import TestCase, mock
+
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import QSettings
 
 from CoverletterCreator.coverletter_creator import CoverletterCreator
@@ -22,6 +22,7 @@ class TestCoverletterCreator(TestCase):
 		self.cc.file_dirty = False # To not trigger "are you sure?" popup
 		self.cc.close()
 
+	'''
 	def test_connect_all_fields(self):
 		self.fail()
 
@@ -63,12 +64,27 @@ class TestCoverletterCreator(TestCase):
 
 	def test_load_file(self):
 		self.fail()
+	'''
 
-	def test_browse_photo(self):
-		self.fail()
+	@mock.patch('CoverletterCreator.coverletter_creator.QFileDialog', autospec=True)
+	@mock.patch('CoverletterCreator.coverletter_creator.QtWidgets.QMessageBox.information')
+	def test_browse_and_get_photo(self, mock_error, mock_opendialog):
+		from PyQt5 import QtGui
+		# Valid photo path
+		mock_opendialog.getOpenFileName.return_value = 'Latex/Resources/profile.png', 'file_type'
+		self.cc.label_pic.clear()
+		self.cc.browse_photo()
+		self.assertEqual("Latex/Resources/profile.png", self.cc.PHOTOPATH.text())
+		self.assertIsInstance(self.cc.label_pic.pixmap(), QtGui.QPixmap)
 
-	def test_get_photo(self):
-		self.fail()
+		# invalid photo path
+		mock_opendialog.getOpenFileName.return_value = 'invalid.png', 'file_type'
+		self.cc.browse_photo()
+		# ensure no change on set path
+		self.assertEqual("Latex/Resources/profile.png", self.cc.PHOTOPATH.text())
+		assert mock_error.called
+
+
 
 	@mock.patch('CoverletterCreator.coverletter_creator.PdfCreator')
 	@mock.patch('CoverletterCreator.coverletter_creator.QtWidgets.QMessageBox.critical' )
@@ -103,7 +119,8 @@ class TestCoverletterCreator(TestCase):
 		assert mock_textcreator().convert_to_dict.called
 		assert mock_textcreator().render_template.called
 		assert mock_textcreator().compile_text.called
-		mock_textcreator().compile_text.assert_called_with(open_text=True, outputDir='test_generate_text_dir', textname='__Coverletter.txt')
+		mock_textcreator().compile_text.assert_called_with(open_text=True, outputDir='test_generate_text_dir',
+														   textname=mock.ANY)
 
 		mock_textcreator().read_template.side_effect = FileNotFoundError
 		self.cc.generate_text()

@@ -14,7 +14,7 @@ app = QtWidgets.QApplication(sys.argv)
 
 class TestSettingsHandler(TestCase):
 	def setUp(self):
-		self.settings = QSettings("KhaleelKhan", "SettingsTestApp")
+		self.settings = QSettings("KhaleelKhan", "SettingsApp-unittest")
 		self.settings.clear()
 		self.form = SettingsHandler(settings=self.settings)
 		self.form.show()

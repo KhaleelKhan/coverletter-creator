@@ -22,13 +22,12 @@ class TestCoverletterCreator(TestCase):
 		self.cc.file_dirty = False # To not trigger "are you sure?" popup
 		self.cc.close()
 
+	def test_check_mandatory_fields(self):
+		self.cc.FIRSTNAME.setText("test")
+		self.cc.FIRSTNAME.setText("")
+		self.assertFalse(self.cc.pb_generatePdf.isEnabled())
+		self.assertFalse(self.cc.pb_generateText.isEnabled())
 	'''
-	def test_connect_all_fields(self):
-		self.fail()
-
-	def test_connect_mandatory_fields(self):
-		self.fail()
-
 	def test_label_clicked(self):
 		self.fail()
 

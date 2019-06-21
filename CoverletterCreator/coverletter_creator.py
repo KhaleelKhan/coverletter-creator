@@ -34,7 +34,6 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		self.actionExit.triggered.connect(self.close)
 		self.actionSettings.triggered.connect(self.settings.show)
 
-
 		# Set default values
 		self.filename = "Examples/example_project.xml"
 		self.file_dirty = False
@@ -55,7 +54,8 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		for child in self.centralwidget.findChildren(QtWidgets.QCheckBox):
 			child.mousePressEvent = functools.partial(self.checkbox_clicked, source=child)
 		self.RECEIPIENTGENDER.mousePressEvent = functools.partial(self.combobox_clicked, source=self.RECEIPIENTGENDER)
-		self.RECEIPIENTSALUTATION.mousePressEvent = functools.partial(self.combobox_clicked, source=self.RECEIPIENTSALUTATION)
+		self.RECEIPIENTSALUTATION.mousePressEvent = functools.partial(self.combobox_clicked,
+																	  source=self.RECEIPIENTSALUTATION)
 
 		self.COMPANYNAME.editingFinished.connect(lambda: self.COMPANYSHORTNAME.setText(self.COMPANYNAME.text()))
 
@@ -74,10 +74,10 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 	def connect_mandatory_fields(self):
 		mandatory_fields_list = [self.FIRSTNAME, self.LASTNAME, self.MOBILE, self.EMAIL, self.COMPANYNAME]
 		for textBox in mandatory_fields_list:
-			textBox.textChanged[str].connect(lambda: self.pb_generatePdf.setEnabled(textBox.text() != ""))
+			textBox.textChanged[str].connect(lambda s: self.pb_generatePdf.setEnabled(s != ""))
 
 		for textBox in mandatory_fields_list:
-			textBox.textChanged[str].connect(lambda: self.pb_generateText.setEnabled(textBox.text() != ""))
+			textBox.textChanged[str].connect(lambda s: self.pb_generateText.setEnabled(s != ""))
 
 	def label_clicked(self, event, source):
 		var_code = source.accessibleName()
@@ -152,7 +152,8 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
 		personal_info = Element('personal_info')
 		root.append(personal_info)
-		for qW in [self.FIRSTNAME, self.LASTNAME, self.MOBILE, self.EMAIL, self.HOMEPAGE, self.GITHUBNAME, self.LINKEDINNAME	]:
+		for qW in [self.FIRSTNAME, self.LASTNAME, self.MOBILE, self.EMAIL, self.HOMEPAGE, self.GITHUBNAME,
+				   self.LINKEDINNAME]:
 			child = Element(qW.objectName())
 			child.text = qW.text()
 			personal_info.append(child)
@@ -163,7 +164,8 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
 		company_info = Element('company_info')
 		root.append(company_info)
-		for qW in [self.COMPANYNAME, self.COMPANYSHORTNAME, self.DEPARTMENT, self.LETTERTITLE, self.JOBTITLE, self.JOBREFID, self.RECEIPIENTNAME]:
+		for qW in [self.COMPANYNAME, self.COMPANYSHORTNAME, self.DEPARTMENT, self.LETTERTITLE, self.JOBTITLE,
+				   self.JOBREFID, self.RECEIPIENTNAME]:
 			child = Element(qW.objectName())
 			child.text = qW.text()
 			company_info.append(child)
@@ -206,7 +208,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		return root
 
 	def saveas_project(self):
-		filename, _ = QFileDialog.getSaveFileName(self, "Save Project As","./","XML Files (*.xml)")
+		filename, _ = QFileDialog.getSaveFileName(self, "Save Project As", "./", "XML Files (*.xml)")
 
 		if filename:
 			if ".xml" not in filename:
@@ -216,7 +218,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 			self.load_file(filename)
 
 	def open_project(self):
-		filename, _ = QFileDialog.getOpenFileName(self, "Open Project","./","XML Files (*.xml)")
+		filename, _ = QFileDialog.getOpenFileName(self, "Open Project", "./", "XML Files (*.xml)")
 		if not filename:
 			return
 
@@ -228,7 +230,7 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 	def load_file(self, filename):
 		try:
 			with open(filename, 'r') as f:
-				self.root = XML(f.read())#.replace("\n", ""))
+				self.root = XML(f.read())  # .replace("\n", ""))
 			self.reset_all_fields()
 			for element in self.root.iter():
 				widget = self.findChild(QtWidgets.QLineEdit, str(element.tag))
@@ -296,11 +298,12 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 
 		self.pb_generatePdf.setEnabled(False)
 		try:
-			pdfcreator.compile_xelatex(compiler=self.settings.get_latex_compiler(), pdfname=filename+".pdf",
-									outputDir=self.settings.latex_dir,
-									open_pdf=self.settings.open_pdf, keep_tex=self.settings.keep_tex)
+			pdfcreator.compile_xelatex(compiler=self.settings.get_latex_compiler(), pdfname=filename + ".pdf",
+									   outputDir=self.settings.latex_dir,
+									   open_pdf=self.settings.open_pdf, keep_tex=self.settings.keep_tex)
 		except FileNotFoundError as e:
-			QtWidgets.QMessageBox.critical(self, "PDF Compilation Failed: " + str(e), "Cannot complete command {}.".format(self.settings.get_latex_compiler()))
+			QtWidgets.QMessageBox.critical(self, "PDF Compilation Failed: " + str(e),
+										   "Cannot complete command {}.".format(self.settings.get_latex_compiler()))
 		self.pb_generatePdf.setEnabled(True)
 
 	def generate_text(self):
@@ -308,13 +311,15 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 		try:
 			textcreator.read_template(template=self.settings.text_template)
 		except FileNotFoundError as e:
-			QtWidgets.QMessageBox.critical(self, "Error: " + repr(e) , "Cannot find template file {}.\n".format(self.settings.text_template))
+			QtWidgets.QMessageBox.critical(self, "Error: " + repr(e),
+										   "Cannot find template file {}.\n".format(self.settings.text_template))
 		textcreator.convert_to_dict()
 		textcreator.render_template()
 		filename = self.COMPANYSHORTNAME.text() + '_' + self.JOBREFID.text() + '_Coverletter'
 		filename = "".join(i for i in filename if i not in ".\/:    *?<>|").replace(r' ', '_')
 		self.pb_generateText.setEnabled(False)
-		textcreator.compile_text(textname=filename+".txt", outputDir=self.settings.text_dir, open_text=self.settings.open_text)
+		textcreator.compile_text(textname=filename + ".txt", outputDir=self.settings.text_dir,
+								 open_text=self.settings.open_text)
 		self.pb_generateText.setEnabled(True)
 
 	def writeSettings(self):
@@ -344,22 +349,24 @@ class CoverletterCreator(QtWidgets.QMainWindow, mainWindow.Ui_MainWindow):
 	def closeEvent(self, event):
 		if self.file_dirty:
 			choice = QtWidgets.QMessageBox.question(self, 'Project not saved',
-												"Save Project before exit?",
-												QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Cancel)
+													"Save Project before exit?",
+													QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Cancel)
 			if choice == QtWidgets.QMessageBox.Yes:
 				self.save_project()
 				self.writeSettings()
 				event.accept()
-				#sys.exit()
+			# sys.exit()
 			elif choice == QtWidgets.QMessageBox.Cancel:
 				event.ignore()
 			else:
 				self.writeSettings()
 				event.accept()
-				#sys.exit()
+		# sys.exit()
 		else:
 			self.writeSettings()
 			event.accept()
+
+
 #			sys.exit()
 
 

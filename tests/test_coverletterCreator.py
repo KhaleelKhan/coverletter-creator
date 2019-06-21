@@ -10,6 +10,7 @@ app = QtWidgets.QApplication(sys.argv)
 app.setOrganizationName("KhaleelKhan")
 app.setApplicationName("Coverletter_Creator-unittest")
 
+
 class TestCoverletterCreator(TestCase):
 	def setUp(self):
 		# Start app fresh
@@ -19,7 +20,7 @@ class TestCoverletterCreator(TestCase):
 		self.cc.show()
 
 	def tearDown(self):
-		self.cc.file_dirty = False # To not trigger "are you sure?" popup
+		self.cc.file_dirty = False  # To not trigger "are you sure?" popup
 		self.cc.close()
 
 	def test_check_mandatory_fields(self):
@@ -27,6 +28,7 @@ class TestCoverletterCreator(TestCase):
 		self.cc.FIRSTNAME.setText("")
 		self.assertFalse(self.cc.pb_generatePdf.isEnabled())
 		self.assertFalse(self.cc.pb_generateText.isEnabled())
+
 	'''
 	def test_label_clicked(self):
 		self.fail()
@@ -83,10 +85,8 @@ class TestCoverletterCreator(TestCase):
 		self.assertEqual("Latex/Resources/profile.png", self.cc.PHOTOPATH.text())
 		assert mock_error.called
 
-
-
 	@mock.patch('CoverletterCreator.coverletter_creator.PdfCreator')
-	@mock.patch('CoverletterCreator.coverletter_creator.QtWidgets.QMessageBox.critical' )
+	@mock.patch('CoverletterCreator.coverletter_creator.QtWidgets.QMessageBox.critical')
 	def test_generate_pdf(self, mock_error, mock_pdfcreator):
 		self.cc.settings.latex_template = "test_generate_latex_template"
 		self.cc.settings.latex_dir = "test_generate_latex_dir"
@@ -105,8 +105,8 @@ class TestCoverletterCreator(TestCase):
 		assert mock_error.called
 
 	@mock.patch('CoverletterCreator.coverletter_creator.TextCreator')
-	@mock.patch('CoverletterCreator.coverletter_creator.QtWidgets.QMessageBox.critical' )
-	def test_generate_text(self,mock_error, mock_textcreator):
+	@mock.patch('CoverletterCreator.coverletter_creator.QtWidgets.QMessageBox.critical')
+	def test_generate_text(self, mock_error, mock_textcreator):
 		self.cc.settings.text_template = "test_generate_text_template"
 		self.cc.settings.text_dir = "test_generate_text_dir"
 		self.cc.settings.open_text = True
@@ -150,4 +150,3 @@ class TestCoverletterCreator(TestCase):
 
 		self.cc.readSettings()
 		self.assertEqual("test_readSettings_filename", self.cc.filename)
-

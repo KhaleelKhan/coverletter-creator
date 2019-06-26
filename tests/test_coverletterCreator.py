@@ -1,8 +1,9 @@
 import sys
 from unittest import TestCase, mock
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import QSettings
+from PyQt5.QtTest import QTest
 
 from CoverletterCreator.coverletter_creator import CoverletterCreator
 
@@ -29,16 +30,22 @@ class TestCoverletterCreator(TestCase):
 		self.assertFalse(self.cc.pb_generatePdf.isEnabled())
 		self.assertFalse(self.cc.pb_generateText.isEnabled())
 
-	'''
 	def test_label_clicked(self):
-		self.fail()
+		# Testing if the variable names are copied by clicking the corresponding label
+		QTest.mousePress(self.cc.label, QtCore.Qt.LeftButton)
+		self.assertEqual("FIRSTNAME", self.cc.clipboard.text())
 
 	def test_checkbox_clicked(self):
-		self.fail()
+		# Testing if the variable names are copied by clicking the corresponding checkbox
+		QTest.mousePress(self.cc.CERTIFICATESATTACHED, QtCore.Qt.LeftButton)
+		self.assertEqual("CERTIFICATESATTACHED", self.cc.clipboard.text())
 
 	def test_combobox_clicked(self):
-		self.fail()
+		# Testing if the variable names are copied by clicking the corresponding combobox
+		QTest.mousePress(self.cc.RECEIPIENTGENDER, QtCore.Qt.LeftButton)
+		self.assertEqual("RECEIPIENTGENDER", self.cc.clipboard.text())
 
+	'''
 	def test_setWindowTitleUnsaved(self):
 		self.fail()
 

@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icon-192.png</file>
     <file>notokay.png</file>
     <file>okay.png</file>
   </qresource>

@@ -46,7 +46,9 @@ class PdfCreator:
 		:param template: Path to template file
 		:type template: str
 		"""
-		self.template = latex_jinja_env.get_template(os.path.realpath(template))
+		template_path = os.path.realpath(template)
+		# jinja2 requires "/" in path (like linux) instead of "\"
+		self.template = latex_jinja_env.get_template(template_path.replace("\\", "/"))
 
 	def render_template(self):
 		"""

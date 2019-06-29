@@ -45,19 +45,18 @@ class TestCoverletterCreator(TestCase):
 		QTest.mousePress(self.cc.RECEIPIENTGENDER, QtCore.Qt.LeftButton)
 		self.assertEqual("RECEIPIENTGENDER", self.cc.clipboard.text())
 
+	@mock.patch('CoverletterCreator.coverletter_creator.QFileDialog', autospec=True)
+	def test_new_project(self, mock_opendialog):
+		mock_opendialog.getSaveFileName.return_value = 'valid.xml', 'file_type'
+		self.cc.new_project()
+
+		# check all fields reset
+		self.assertEqual("", self.cc.FIRSTNAME.text())
+		self.assertEqual("", self.cc.TEXTABOUTME.toPlainText())
+		self.assertFalse(self.cc.CERTIFICATESATTACHED.isChecked())
+		self.assertEqual("valid.xml", self.cc.filename)
+
 	'''
-	def test_setWindowTitleUnsaved(self):
-		self.fail()
-
-	def test_setWindowTitleSaved(self):
-		self.fail()
-
-	def test_new_project(self):
-		self.fail()
-
-	def test_reset_all_fields(self):
-		self.fail()
-
 	def test_save_project(self):
 		self.fail()
 

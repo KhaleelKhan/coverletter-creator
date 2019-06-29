@@ -20,7 +20,7 @@ Python packages:
 
 * Jinja2==2.10.1
 * lxml==4.3.3
-* pyenchant==2.0.0
+* pyspellchecker==0.4.0
 * PyQt5==5.12.2
 * PyQt5-sip==4.19.17
 

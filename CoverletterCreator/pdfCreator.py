@@ -94,33 +94,34 @@ class PdfCreator:
 		import shutil
 
 		current = os.getcwd()
-		temp = tempfile.mkdtemp()
-		os.chdir(temp)
+		#temp = tempfile.mkdtemp()
+		with tempfile.TemporaryDirectory() as temp:
+			os.chdir(temp)
 
-		f = open('coverletter.tex', 'w')
-		f.write(self.renderer_template)
-		f.close()
+			f = open('coverletter.tex', 'w')
+			f.write(self.renderer_template)
+			f.close()
 
-		if compiler in SettingsHandler.latex_compiler_list:
-			args = ['-interaction=nonstopmode', 'coverletter.tex']
-		else:
-			args = ['-halt-on-error', 'coverletter.tex']
+			if compiler in SettingsHandler.latex_compiler_list:
+				args = ['-interaction=nonstopmode', 'coverletter.tex']
+			else:
+				args = ['-halt-on-error', 'coverletter.tex']
 
-		# Start a dialog window which handles log display and execution.
-		progress_display = ProgressDisplay(parent=self.parent, executable=compiler, arguments=args)
-		progress_display.exec_()  # This blocks the other windows, which is expected. self closing.
-		# Reshow dialog window but in non-blocking mode
-		progress_display.show()
+			# Start a dialog window which handles log display and execution.
+			progress_display = ProgressDisplay(parent=self.parent, executable=compiler, arguments=args)
+			progress_display.exec_()  # This blocks the other windows, which is expected. self closing.
+			# Reshow dialog window but in non-blocking mode
+			progress_display.show()
 
-		try:
-			os.rename('coverletter.pdf', pdfname)
-			shutil.copy(pdfname, outputDir)
-			if keep_tex:
-				shutil.copy('coverletter.tex', outputDir)
-		except FileNotFoundError:
-			raise FileNotFoundError
-		shutil.rmtree(temp)
-		os.chdir(current)
+			try:
+				os.rename('coverletter.pdf', pdfname)
+				shutil.copy(pdfname, outputDir)
+				if keep_tex:
+					shutil.copy('coverletter.tex', outputDir)
+			except FileNotFoundError:
+				raise FileNotFoundError
+		#shutil.rmtree(temp)
+			os.chdir(current)
 
 		if open_pdf:
 			if sys.platform.startswith('linux'):

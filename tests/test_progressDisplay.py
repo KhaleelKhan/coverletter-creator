@@ -12,7 +12,10 @@ app = QtWidgets.QApplication(sys.argv)
 
 class TestProgressDisplay(TestCase):
 	def setUp(self):
-		self.progress_display = ProgressDisplay('python', ['-h'])
+		# self.progress_display = ProgressDisplay('ping', ['/r','3','127.0.0.1']) # Windows
+		# self.progress_display = ProgressDisplay('ping', ['-c3','127.0.0.1']) # unix
+		# ping doesn't play well with travisCI, so use "python -h" for testing
+		self.progress_display = ProgressDisplay('python', ['-h'])  # All
 
 	def test_show_dialog(self):
 		self.progress_display.show()

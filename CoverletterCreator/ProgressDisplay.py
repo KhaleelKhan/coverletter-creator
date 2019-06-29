@@ -31,6 +31,7 @@ class ProgressDisplay(QtWidgets.QDialog, progress.Ui_ProgressDialog):
 
 		# QProcess object for external app
 		self.process = QtCore.QProcess(self)
+		self.process.setReadChannel(0) # set default read channel to stdout
 		# QProcess emits `readyRead` when there is data to be read
 		self.process.readyRead.connect(self.dataReady)
 
@@ -47,7 +48,8 @@ class ProgressDisplay(QtWidgets.QDialog, progress.Ui_ProgressDialog):
 		"""
 		cursor = self.log_display.textCursor()
 		cursor.movePosition(cursor.End)
-		cursor.insertText(str(self.process.readAll(), 'utf-8'))
+		output_str = str(self.process.readAll(), 'utf-8')
+		cursor.insertText(output_str)
 		self.log_display.ensureCursorVisible()
 
 	def processFinished(self):

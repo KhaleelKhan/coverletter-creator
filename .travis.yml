@@ -16,6 +16,10 @@ matrix:
       language: shell       # 'language: python' is an error on Travis CI Windows
       before_install: 
         - choco install python
+        - wget https://miktex.org/download/ctan/systems/win32/miktex/setup/windows-x64/miktexsetup-2.9.6942-x64.zip
+        - 7z x miktexsetup-2.9.6942-x64.zip
+        - ./miktexsetup.exe --package-set=basic download
+        - ./miktexsetup.exe install
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
 cache: pip
 services: 

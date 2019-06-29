@@ -51,6 +51,7 @@ class ProgressDisplay(QtWidgets.QDialog, progress.Ui_ProgressDialog):
 		output_str = str(self.process.readAll(), 'utf-8')
 		cursor.insertText(output_str)
 		self.log_display.ensureCursorVisible()
+		print(output_str)
 
 	def processFinished(self):
 		"""

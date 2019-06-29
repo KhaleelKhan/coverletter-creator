@@ -11,19 +11,10 @@ import os
 import re
 import sys
 
-import enchant
-from PyQt5.QtCore import QEvent
-from PyQt5.QtCore import QStandardPaths
-from PyQt5.QtCore import Qt
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QMouseEvent
-from PyQt5.QtGui import QSyntaxHighlighter
-from PyQt5.QtGui import QTextCharFormat
-from PyQt5.QtGui import QTextCursor
-from PyQt5.QtWidgets import QAction
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtWidgets import QMenu
-from PyQt5.QtWidgets import QPlainTextEdit
+from PyQt5.QtCore import QEvent, QStandardPaths, Qt, pyqtSignal
+from PyQt5.QtGui import QMouseEvent, QSyntaxHighlighter, QTextCharFormat, QTextCursor
+from PyQt5.QtWidgets import QAction, QApplication, QMenu, QPlainTextEdit
+from spellchecker import SpellChecker
 
 
 class SpellTextEdit(QPlainTextEdit):
@@ -33,18 +24,17 @@ class SpellTextEdit(QPlainTextEdit):
 
         # Path for custom dict
         custom_dict_path = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
-        custom_dict_filename = 'customWords'
+		custom_dict_filename = 'customWords.txt'
         self.custom_dict = os.path.join(custom_dict_path, custom_dict_filename)
         os.makedirs(os.path.dirname(self.custom_dict), exist_ok=True)
-        with open(self.custom_dict, 'a+'):
-            pass
 
         # Default dictionary based on the local locale.
-        d = enchant.Dict()
-        self.dict = enchant.DictWithPWL(tag=d.tag, pwl=self.custom_dict)
+		self.spell = SpellChecker()
+		if os.path.exists(self.custom_dict):
+			self.spell.word_frequency.load_text_file(self.custom_dict)
 
         self.highlighter = Highlighter(self.document())
-        self.highlighter.setDict(self.dict)
+		self.highlighter.setDict(self.spell)
 
 
     def mousePressEvent(self, event):
@@ -67,9 +57,9 @@ class SpellTextEdit(QPlainTextEdit):
         # suggestions if it is.
         if self.textCursor().hasSelection():
             text = str(self.textCursor().selectedText())
-            if not self.dict.check(text):
+			if text not in self.spell:
                 spell_menu = QMenu('Spelling Suggestions')
-                for word in self.dict.suggest(text):
+				for word in self.spell.candidates(text):
                     action = SpellAction(word, spell_menu)
                     action.correct.connect(self.correctWord)
                     spell_menu.addAction(action)
@@ -97,9 +87,13 @@ class SpellTextEdit(QPlainTextEdit):
         cursor.endEditBlock()
 
     def addWord(self, word):
-        self.dict.add_to_pwl(word)
-        self.highlighter.setDict(self.dict)
+		self.spell.word_frequency.add(word)
+		self.highlighter.setDict(self.spell)
         self.highlighter.rehighlight()
+
+		# Save custom word
+		with open(self.custom_dict, 'a+') as f:
+			f.write(word + " ")
 
 class Highlighter(QSyntaxHighlighter):
 
@@ -124,7 +118,7 @@ class Highlighter(QSyntaxHighlighter):
         format.setUnderlineStyle(QTextCharFormat.SpellCheckUnderline)
 
         for word_object in re.finditer(self.WORDS, text):
-            if not self.dict.check(word_object.group()):
+			if word_object.group() not in self.dict:
                 self.setFormat(word_object.start(),
                     word_object.end() - word_object.start(), format)
 
